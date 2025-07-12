@@ -2,18 +2,15 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
-import { setToken, isAuthenticated } from "@/helpers"
 
 export default function LoginForm() {
-    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -22,22 +19,15 @@ export default function LoginForm() {
         rememberMe: false,
     })
 
-    // Verificar si ya está autenticado al cargar la página
-    useEffect(() => {
-        if (isAuthenticated()) {
-            router.push("/dashboard");
-        }
-    }, [router]);
-
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
         setIsLoading(true)
 
         // Simular llamada a API
         await new Promise((resolve) => setTimeout(resolve, 2000))
 
+        console.log("Login attempt:", formData)
         setIsLoading(false)
-        setToken("1234567890");
-        router.push("/dashboard");
     }
 
     const handleInputChange = (field: string, value: string | boolean) => {
@@ -48,7 +38,7 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-500 from-slate-50 to-slate-100 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
             <Card className="w-full max-w-md shadow-lg">
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl font-bold">Iniciar Sesión</CardTitle>
@@ -102,11 +92,25 @@ export default function LoginForm() {
                             </div>
                         </div>
 
-       
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="remember"
+                                    checked={formData.rememberMe}
+                                    onCheckedChange={(checked) => handleInputChange("rememberMe", checked as boolean)}
+                                />
+                                <Label htmlFor="remember" className="text-sm font-normal">
+                                    Recordarme
+                                </Label>
+                            </div>
+                            <Button variant="link" className="px-0 font-normal text-sm">
+                                ¿Olvidaste tu contraseña?
+                            </Button>
+                        </div>
                     </CardContent>
 
-                    <CardFooter className="flex flex-col pt-5 pb-5">
-                        <Button className="w-full" disabled={isLoading} onClick={handleSubmit}>
+                    <CardFooter className="flex flex-col space-y-4">
+                        <Button type="submit" className="w-full" disabled={isLoading}>
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -117,9 +121,7 @@ export default function LoginForm() {
                             )}
                         </Button>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            
-                        </div>
+                        
                     </CardFooter>
                 </form>
             </Card>

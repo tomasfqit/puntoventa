@@ -1,11 +1,17 @@
 "use client";
+import { getToken } from '@/api/config';
+import { Loading } from '@/components/Loading';
 import { redirect } from 'next/navigation';
-import { isAuthenticated } from '@/helpers';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  if (isAuthenticated()) {
-    redirect('/dashboard');
-  } else {
-    redirect('/login');
-  }
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      redirect('/home');
+    } else {
+      redirect('/login');
+    }
+  }, []);
 }
