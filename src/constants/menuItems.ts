@@ -1,4 +1,4 @@
-import { Home, Package, Users } from "lucide-react";
+import { Home, LucideProps, Package, Users } from "lucide-react";
 
 export interface SidebarProps {
   isOpen: boolean;
@@ -11,7 +11,9 @@ export interface SubMenuItem {
 
 export interface MenuItem {
   title: string;
-  icon: any;
+  icon: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
   path: string;
   submenu?: SubMenuItem[];
 }

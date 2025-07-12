@@ -2,13 +2,13 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Mail, Lock, Loader2, User } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useAuth } from "@/hooks/useAuth"
+import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react"
+import { useState } from "react"
 
 export default function LoginForm() {
     const { login } = useAuth();
@@ -26,7 +26,7 @@ export default function LoginForm() {
             return;
         }
         setIsLoading(true);
-        
+
         // Simular llamada a API
         setTimeout(() => {
             login("1234567890");

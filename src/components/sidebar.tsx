@@ -1,24 +1,14 @@
 "use client"
 
-import { useState } from "react"
-import {
-    ChevronRight,
-    Home,
-    Settings,
-    Users,
-    FileText,
-    Database,
-    Bell,
-    Mail,
-    Calendar,
-    BarChart3,
-    Package,
-} from "lucide-react"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
-import { Input } from "./ui/input"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { MenuGroup, MenuItem, SidebarProps, SubMenuItem, menuData } from "@/constants/menuItems"
+import {
+    ChevronRight
+} from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { menuData, MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/menuItems"
+import { useState } from "react"
+import { Input } from "./ui/input"
 
 
 
@@ -35,7 +25,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
             const filteredItems = group.items.filter((item: MenuItem) => {
                 // Buscar en el título del item principal
                 const mainTitleMatch = item.title.toLowerCase().includes(search.toLowerCase())
-                
+
                 // Buscar en los submenús si existen
                 const submenuMatch = item.submenu?.some((subItem: SubMenuItem) =>
                     subItem.title.toLowerCase().includes(search.toLowerCase())
@@ -75,9 +65,9 @@ export function Sidebar({ isOpen }: SidebarProps) {
                 } overflow-hidden`}
         >
             <div className="p-1">
-                <Input 
-                    placeholder="Buscar" 
-                    className="w-full bg-white" 
+                <Input
+                    placeholder="Buscar"
+                    className="w-full bg-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -100,7 +90,11 @@ export function Sidebar({ isOpen }: SidebarProps) {
                                             <Button
                                                 variant="ghost"
                                                 className="w-full justify-start h-10 px-2 text-gray-700 hover:bg-gray-100"
-                                                onClick={()=> {localPath !== item.path && router.push(item.path)}}
+                                                onClick={() => {
+                                                    if (localPath !== item.path) {
+                                                        router.push(item.path)
+                                                    }
+                                                }}
                                                 style={{
                                                     backgroundColor: localPath === item.path ? "rgba(0, 0, 0, 0.05)" : "transparent",
                                                     color: localPath === item.path ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)",
@@ -147,7 +141,7 @@ function MenuItemWithSubmenu({ item }: { item: MenuItem }) {
                                 variant="ghost"
                                 size="sm"
                                 className="w-full justify-start h-8 px-2 text-gray-600 hover:bg-gray-100"
-                                onClick={()=> localPath !== subItem.path && router.push(subItem.path)}
+                                onClick={() => localPath !== subItem.path && router.push(subItem.path)}
                                 style={{
                                     backgroundColor: localPath === subItem.path ? "rgba(0, 0, 0, 0.05)" : "transparent",
                                     color: localPath === subItem.path ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)",

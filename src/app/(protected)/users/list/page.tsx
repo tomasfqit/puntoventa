@@ -1,18 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Usuario } from '@/interfaces/tables'
 import { supabase } from '@/lib/supabaseClient'
+import { useEffect, useState } from 'react'
 
 export default function UsuariosPage() {
-    const [users, setUsers] = useState<any[]>([])
+    const [users, setUsers] = useState<Usuario[]>([])
 
     useEffect(() => {
         const fetchUsers = async () => {
-            let { data: usersResponse, error } = await supabase
-                .from('users')
+            const { data: usersResponse, error } = await supabase
+                .from('usuarios')
                 .select('*')
 
-            console.log('data =>',usersResponse);
+            console.log('data =>', usersResponse);
             if (error) {
                 console.error('Error al traer usuarios:', error)
             } else {
