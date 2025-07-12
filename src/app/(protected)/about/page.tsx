@@ -1,3 +1,5 @@
 export default function AboutPage() {
-    return <div>About</div>;
+    return <div className="w-full">
+        test
+    </div>;
 }
