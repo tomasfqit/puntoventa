@@ -10,7 +10,7 @@ export default function UsuariosPage() {
     useEffect(() => {
         const fetchUsers = async () => {
             const { data: usersResponse, error } = await supabase
-                .from('usuarios')
+                .from('usuario')
                 .select('*')
 
             console.log('data =>', usersResponse);
