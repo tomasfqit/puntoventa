@@ -18,72 +18,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Button } from "@/components/ui/button"
 import { Input } from "./ui/input"
 import { usePathname, useRouter } from "next/navigation"
+import { menuData, MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/menuItems"
 
-interface SidebarProps {
-    isOpen: boolean
-}
 
-interface SubMenuItem {
-    title: string;
-    path: string;
-}
-
-interface MenuItem {
-    title: string;
-    icon: any;
-    path: string;
-    submenu?: SubMenuItem[];
-}
-
-interface MenuGroup {
-    title: string
-    items: MenuItem[]
-}
 
 // Datos del menú
-const menuData: MenuGroup[] = [
-    {
-        title: "Principal",
-        items: [
-            {
-                title: "Inicio",
-                icon: Home,
-                path: "/home",
-            }
-        ],
-    },
-    {
-        title: "Inventario",
-        items: [
-            {
-                title: "Productos",
-                icon: Package,
-                path: "/productos",
-                submenu: [
-                    {
-                        title: "Lista de Productos",
-                        path: "/products",
-                    },
-                    {
-                        title: "Categorías",
-                        path: "/categories",
-                    }
-                ]
-            },
-            {
-                title: "Bodegas",
-                icon: Package,
-                path: "/bodegas",
-                submenu: [
-                    {
-                        title: "Lista de Bodegas",
-                        path: "/bodegas",
-                    }
-                ]
-            }
-        ]
-    }
-]
 
 export function Sidebar({ isOpen }: SidebarProps) {
     const [searchTerm, setSearchTerm] = useState("");
