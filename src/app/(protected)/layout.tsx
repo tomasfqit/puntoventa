@@ -39,7 +39,7 @@ export default function DashboardLayout({
       <Header onToggleSidebar={toggleSidebar} title="Panel de Control" />
       <Sidebar isOpen={sidebarOpen} />
       <MainContent sidebarOpen={sidebarOpen}>
-        <div className="w-full h-[90.3vh] bg-gray-100 overflow-y-auto">
+        <div className="w-full h-[90.3vh] bg-gray-100 overflow-y-auto p-2">
           {children}
         </div>
       </MainContent>
