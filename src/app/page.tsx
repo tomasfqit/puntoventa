@@ -8,9 +8,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const token = getToken();
-    if (token) {
-      redirect('/home');
-    } else {
+    if (!token) {
       redirect('/login');
     }
   }, []);

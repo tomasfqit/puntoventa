@@ -8,8 +8,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, Loader2, User } from "lucide-react"
+import { setToken } from "@/api/config"
+import { useRouter } from "next/navigation"
 
 export default function LoginForm() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -19,16 +22,12 @@ export default function LoginForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        console.log(formData);
-
-        // setIsLoading(true)
-
-        // // Simular llamada a API
-        // await new Promise((resolve) => setTimeout(resolve, 2000))
-
-        // console.log("Login attempt:", formData)
-        // setIsLoading(false)
+        if(formData.username === "" || formData.password === ""){
+            alert("Por favor, ingresa un usuario y contraseña");
+            return;
+        }
+        setToken("1234567890");
+        router.push("/home");
     }
 
     const handleInputChange = (field: string, value: string | boolean) => {
