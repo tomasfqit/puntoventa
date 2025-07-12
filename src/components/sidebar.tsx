@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
+import { Input } from "./ui/input"
 
 interface SidebarProps {
     isOpen: boolean
@@ -181,18 +182,10 @@ export function Sidebar({ isOpen }: SidebarProps) {
             className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out z-40 ${isOpen ? "w-64" : "w-0"
                 } overflow-hidden`}
         >
+            <div className="p-1">
+                <Input placeholder="Buscar" className="w-full" />
+            </div>
             <div className="p-4 h-full overflow-y-auto">
-                {/* Logo/Brand */}
-                <div className="flex items-center gap-2 mb-6 px-2">
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-white">
-                        <Package className="size-4" />
-                    </div>
-                    <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-semibold text-gray-900">Mi App</span>
-                        <span className="text-xs text-gray-500">v2.0.0</span>
-                    </div>
-                </div>
-
                 {/* Menú */}
                 <nav className="space-y-6">
                     {menuData.map((group) => (
