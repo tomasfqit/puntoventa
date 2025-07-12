@@ -8,8 +8,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, Loader2, User } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function LoginForm() {
+    const { login } = useAuth();
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -19,16 +21,17 @@ export default function LoginForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        console.log(formData);
-
-        // setIsLoading(true)
-
-        // // Simular llamada a API
-        // await new Promise((resolve) => setTimeout(resolve, 2000))
-
-        // console.log("Login attempt:", formData)
-        // setIsLoading(false)
+        if (formData.username === "" || formData.password === "") {
+            alert("Por favor, ingresa un usuario y contraseña");
+            return;
+        }
+        setIsLoading(true);
+        
+        // Simular llamada a API
+        setTimeout(() => {
+            login("1234567890");
+            setIsLoading(false);
+        }, 1000);
     }
 
     const handleInputChange = (field: string, value: string | boolean) => {
@@ -46,69 +49,68 @@ export default function LoginForm() {
                     <CardDescription>Ingresa tus credenciales para acceder a tu cuenta</CardDescription>
                 </CardHeader>
 
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="username">Usuario</Label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    id="username"
-                                    type="username"
-                                    placeholder="usuario"
-                                    className="pl-10"
-                                    value={formData.username}
-                                    onChange={(e) => handleInputChange("username", e.target.value)}
-                                    required
-                                />
-                            </div>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="username">Usuario</Label>
+                        <div className="relative">
+                            <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="username"
+                                type="username"
+                                placeholder="usuario"
+                                className="pl-10"
+                                value={formData.username}
+                                onChange={(e) => handleInputChange("username", e.target.value)}
+                                required
+                            />
                         </div>
+                    </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Contraseña</Label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    id="password"
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    className="pl-10 pr-10"
-                                    value={formData.password}
-                                    onChange={(e) => handleInputChange("password", e.target.value)}
-                                    required
-                                />
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-4 w-4 text-muted-foreground" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-muted-foreground" />
-                                    )}
-                                </Button>
-                            </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Contraseña</Label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                className="pl-10 pr-10"
+                                value={formData.password}
+                                onChange={(e) => handleInputChange("password", e.target.value)}
+                                required
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                    <Eye className="h-4 w-4 text-muted-foreground" />
+                                )}
+                            </Button>
                         </div>
+                    </div>
 
-                        
-                    </CardContent>
 
-                    <CardFooter className="flex flex-col space-y-4">
-                        <Button className="w-full" disabled={isLoading} onClick={handleSubmit}>
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Iniciando sesión...
-                                </>
-                            ) : (
-                                "Iniciar Sesión"
-                            )}
-                        </Button>
-<div className="h-2"/>
-                        
-                    </CardFooter>
+                </CardContent>
+                <CardFooter className="flex flex-col space-y-4">
+                    <Button className="w-full" disabled={isLoading} onClick={handleSubmit}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Iniciando sesión...
+                            </>
+                        ) : (
+                            "Iniciar Sesión"
+                        )}
+                    </Button>
+                    <div className="h-2" />
+
+                </CardFooter>
             </Card>
         </div>
     )

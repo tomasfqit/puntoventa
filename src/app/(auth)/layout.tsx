@@ -1,27 +1,29 @@
 "use client";
-import { getToken } from '@/api/config';
 import { Loading } from '@/components/Loading';
-import { redirect } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AuthLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const [isLoading, setIsLoading] = useState(true);
+    const { isAuthenticated, isLoading } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
-        const token = getToken();
-        setIsLoading(false);
-        if (token) {
-            redirect('/home');
-        } 
-    }, []);
+        if (!isLoading && isAuthenticated) {
+            router.push('/home');
+        }
+    }, [isAuthenticated, isLoading, router]);
 
-    // Mostrar un estado de carga mientras se determina la redirección
     if (isLoading) {
         return <Loading message='Cargando...' />;
+    }
+
+    if (isAuthenticated) {
+        return <Loading message='Redirigiendo...' />;
     }
 
     return <div className='h-[100vh] w-[100vw]'>{children}</div>;

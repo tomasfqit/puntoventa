@@ -65,8 +65,10 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)"],
+        sans: ["var(--font-public-sans)"],
         mono: ["var(--font-geist-mono)"],
+        "geist-sans": ["var(--font-geist-sans)"],
+        "public-sans": ["var(--font-public-sans)"],
       },
     },
   },
