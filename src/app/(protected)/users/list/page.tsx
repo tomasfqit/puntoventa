@@ -29,7 +29,7 @@ export default function UsuariosPage() {
             <ul className="space-y-1">
                 {users.map((user) => (
                     <li key={user.id}>
-                        {user.nombre} - {user.email}
+                        {user.username} - {user.password}
                     </li>
                 ))}
             </ul>
