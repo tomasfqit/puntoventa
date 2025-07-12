@@ -17,7 +17,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
 import { Input } from "./ui/input"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 interface SidebarProps {
     isOpen: boolean
@@ -46,33 +46,49 @@ const menuData: MenuGroup[] = [
         title: "Principal",
         items: [
             {
-                title: "Dashboard",
+                title: "Inicio",
                 icon: Home,
-                path: "/",
-            },
+                path: "/home",
+            }
+        ],
+    },
+    {
+        title: "Inventario",
+        items: [
             {
-                title: "Usuarios",
-                icon: Users,
-                path: "/users",
+                title: "Productos",
+                icon: Package,
+                path: "/productos",
                 submenu: [
                     {
-                        title: "Lista de Usuarios",
-                        path: "/listado-usuarios",
+                        title: "Lista de Productos",
+                        path: "/products",
                     },
                     {
-                        title: "Roles y Permisos",
-                        path: "/roles-y-permisos",
-                    },
-                ],
+                        title: "Categorías",
+                        path: "/categories",
+                    }
+                ]
             },
-        ],
+            {
+                title: "Bodegas",
+                icon: Package,
+                path: "/bodegas",
+                submenu: [
+                    {
+                        title: "Lista de Bodegas",
+                        path: "/bodegas",
+                    }
+                ]
+            }
+        ]
     }
 ]
 
 export function Sidebar({ isOpen }: SidebarProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
-    // Función para filtrar los datos del menú
+    const localPath = usePathname();
     const filterMenuData = (data: MenuGroup[], search: string): MenuGroup[] => {
         if (!search.trim()) return data
 
@@ -127,12 +143,14 @@ export function Sidebar({ isOpen }: SidebarProps) {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
-            <div className="p-4 h-[84.8vh] overflow-y-auto">
+            <div className="p-2 h-[84.8vh] overflow-y-auto">
                 {/* Menú */}
-                <nav className="space-y-6">
+                <nav className="space-y-4">
                     {filteredMenuData.map((group) => (
                         <div key={group.title}>
-                            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">{group.title}</h3>
+                            <div className="w-full bg-gray-100 p-1 rounded-md">
+                                <h3 className="text-xs font-semibold text-gray-500 uppercase">{group.title}</h3>
+                            </div>
                             <ul className="space-y-1">
                                 {group.items.map((item) => (
                                     <li key={item.title}>
@@ -142,7 +160,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
                                             <Button
                                                 variant="ghost"
                                                 className="w-full justify-start h-10 px-2 text-gray-700 hover:bg-gray-100"
-                                                onClick={()=> router.push(item.path)}
+                                                onClick={()=> {localPath !== item.path && router.push(item.path)}}
                                             >
                                                 <item.icon className="mr-3 h-4 w-4" />
                                                 {item.title}
@@ -167,6 +185,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
 function MenuItemWithSubmenu({ item }: { item: MenuItem }) {
     const [isOpen, setIsOpen] = useState(false)
     const router = useRouter();
+    const localPath = usePathname();
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleTrigger asChild>
@@ -184,7 +203,11 @@ function MenuItemWithSubmenu({ item }: { item: MenuItem }) {
                                 variant="ghost"
                                 size="sm"
                                 className="w-full justify-start h-8 px-2 text-gray-600 hover:bg-gray-100"
-                                onClick={()=> router.push(subItem.path)}
+                                onClick={()=> localPath !== subItem.path && router.push(subItem.path)}
+                                style={{
+                                    backgroundColor: localPath === subItem.path ? "rgba(0, 0, 0, 0.05)" : "transparent",
+                                    color: localPath === subItem.path ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)",
+                                }}
                             >
                                 {subItem.title}
                             </Button>
