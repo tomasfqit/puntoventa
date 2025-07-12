@@ -1,9 +1,11 @@
 "use client";
+import { Header } from "@/components/header";
 import { Loading } from "@/components/Loading";
-import Navigation from "@/components/Navigation";
+import { MainContent } from "@/components/main-content";
+import { Sidebar } from "@/components/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +14,11 @@ export default function DashboardLayout({
 }) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -28,11 +35,12 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      <main className="p-6">
+    <div className="bg-gray-100">
+      <Header onToggleSidebar={toggleSidebar} title="Panel de Control" />
+      <Sidebar isOpen={sidebarOpen} />
+      <MainContent sidebarOpen={sidebarOpen}>
         {children}
-      </main>
+      </MainContent>
     </div>
   );
 }
