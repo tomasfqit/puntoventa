@@ -1,17 +1,22 @@
+import { ErrorTypeSupabase } from "@/interfaces/Common";
+
 export const isAuthenticated = () => {
-    const token = localStorage.getItem("token");
-    return token ? true : false;
-}
+  const token = localStorage.getItem("token");
+  return token ? true : false;
+};
 
 export const getToken = () => {
-    return localStorage.getItem("token");
-}
+  return localStorage.getItem("token");
+};
 
 export const setToken = (token: string) => {
-    localStorage.setItem("token", token);
-}
+  localStorage.setItem("token", token);
+};
 
 export const removeToken = () => {
-    localStorage.removeItem("token");
-}
-    
+  localStorage.removeItem("token");
+};
+
+export const errorApiSupabase = (error: ErrorTypeSupabase) => {
+  throw error;
+};

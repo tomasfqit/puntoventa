@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/hooks/useAuth"
+import { setToken } from "@/helpers"
+import { useLogin } from "@/services/usuario/useUsuarioLogin"
 import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function LoginForm() {
-    const { login } = useAuth();
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const { mutate: login, isPending } = useLogin();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -25,13 +27,18 @@ export default function LoginForm() {
             alert("Por favor, ingresa un usuario y contraseña");
             return;
         }
-        setIsLoading(true);
 
         // Simular llamada a API
-        setTimeout(() => {
-            login("1234567890");
-            setIsLoading(false);
-        }, 1000);
+        login({ username: formData.username, password: formData.password }, {
+            onSuccess: () => {
+                setToken(formData.username);
+                router.push("/home");
+            },
+            onError: (error) => {
+                alert("Usuario o contraseña incorrectos");
+                console.log(error);
+            }
+        });
     }
 
     const handleInputChange = (field: string, value: string | boolean) => {
@@ -98,8 +105,8 @@ export default function LoginForm() {
 
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                    <Button className="w-full" disabled={isLoading} onClick={handleSubmit}>
-                        {isLoading ? (
+                    <Button className="w-full" disabled={isPending} onClick={handleSubmit}>
+                        {isPending ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 Iniciando sesión...

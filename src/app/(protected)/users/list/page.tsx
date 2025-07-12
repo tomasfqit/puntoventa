@@ -1,6 +1,6 @@
 'use client'
 
-import { Usuario } from '@/interfaces/tables'
+import { Usuario } from '@/interfaces/Table'
 import { supabase } from '@/lib/supabaseClient'
 import { useEffect, useState } from 'react'
 
