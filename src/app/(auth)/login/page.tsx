@@ -5,29 +5,30 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Eye, EyeOff, Mail, Lock, Loader2, User } from "lucide-react"
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        rememberMe: false,
+        username: "",
+        password: ""
     })
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
+        e.preventDefault();
 
-        // Simular llamada a API
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        console.log(formData);
 
-        console.log("Login attempt:", formData)
-        setIsLoading(false)
+        // setIsLoading(true)
+
+        // // Simular llamada a API
+        // await new Promise((resolve) => setTimeout(resolve, 2000))
+
+        // console.log("Login attempt:", formData)
+        // setIsLoading(false)
     }
 
     const handleInputChange = (field: string, value: string | boolean) => {
@@ -45,19 +46,18 @@ export default function LoginForm() {
                     <CardDescription>Ingresa tus credenciales para acceder a tu cuenta</CardDescription>
                 </CardHeader>
 
-                <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Correo Electrónico</Label>
+                            <Label htmlFor="username">Usuario</Label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="tu@ejemplo.com"
+                                    id="username"
+                                    type="username"
+                                    placeholder="usuario"
                                     className="pl-10"
-                                    value={formData.email}
-                                    onChange={(e) => handleInputChange("email", e.target.value)}
+                                    value={formData.username}
+                                    onChange={(e) => handleInputChange("username", e.target.value)}
                                     required
                                 />
                             </div>
@@ -92,25 +92,11 @@ export default function LoginForm() {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="remember"
-                                    checked={formData.rememberMe}
-                                    onCheckedChange={(checked) => handleInputChange("rememberMe", checked as boolean)}
-                                />
-                                <Label htmlFor="remember" className="text-sm font-normal">
-                                    Recordarme
-                                </Label>
-                            </div>
-                            <Button variant="link" className="px-0 font-normal text-sm">
-                                ¿Olvidaste tu contraseña?
-                            </Button>
-                        </div>
+                        
                     </CardContent>
 
                     <CardFooter className="flex flex-col space-y-4">
-                        <Button type="submit" className="w-full" disabled={isLoading}>
+                        <Button className="w-full" disabled={isLoading} onClick={handleSubmit}>
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -120,10 +106,9 @@ export default function LoginForm() {
                                 "Iniciar Sesión"
                             )}
                         </Button>
-
+<div className="h-2"/>
                         
                     </CardFooter>
-                </form>
             </Card>
         </div>
     )
