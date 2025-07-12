@@ -1,0 +1,41 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always",
+        "source.organizeImports": "always"
+    },
+    "editor.formatOnSave": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "eslint.workingDirectories": [
+        "."
+    ],
+    "eslint.format.enable": true,
+    "typescript.preferences.organizeImports": true,
+    "errorLens.enabled": true,
+    "errorLens.messageEnabled": true,
+    "errorLens.statusBarMessageEnabled": true,
+    "errorLens.statusBarColorsEnabled": true,
+    "errorLens.scrollbarHackEnabled": true,
+    "errorLens.gutterIconsEnabled": true,
+    "errorLens.lensFontFamilyItalic": true,
+    "errorLens.lensFontSize": 12,
+    "errorLens.lensFontStyleItalic": true,
+    "errorLens.lensBorder": true,
+    "errorLens.lensBorderColor": "#ff0000",
+    "errorLens.lensBorderRadius": 4,
+    "errorLens.lensBorderWidth": 1,
+    "errorLens.lensBackground": "#ff00001a",
+    "errorLens.lensForeground": "#ff0000",
+    "errorLens.lensErrorBackground": "#ff00001a",
+    "errorLens.lensErrorForeground": "#ff0000",
+    "errorLens.lensWarningBackground": "#ffa5001a",
+    "errorLens.lensWarningForeground": "#ffa500",
+    "errorLens.lensInfoBackground": "#0066ff1a",
+    "errorLens.lensInfoForeground": "#0066ff",
+    "errorLens.lensHintBackground": "#00ff001a",
+    "errorLens.lensHintForeground": "#00ff00"
+}
