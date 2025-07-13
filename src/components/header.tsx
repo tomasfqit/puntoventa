@@ -19,6 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar, title = "Mi Aplicación" }: HeaderProps) {
+
     const router = useRouter();
     const handleLogout = () => {
         setToken("");

@@ -4,11 +4,12 @@ import { fetchMenu } from "@/api/menuApi"
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/MenuItems"
+import { useAuthLocalStorage } from "@/store/authStore"
 import {
     ChevronRight
 } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Input } from "./ui/input"
 
 
@@ -16,14 +17,21 @@ import { Input } from "./ui/input"
 // Datos del menú
 
 export function Sidebar({ isOpen }: SidebarProps) {
+    const { menuItemsStore, setMenuItemsStore } = useAuthLocalStorage();
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
     const localPath = usePathname();
     const [menuData, setMenuData] = useState<MenuGroup[]>([]);
 
     useEffect(() => {
+        console.log('menuItemsStore =>', menuItemsStore);
+        if (menuItemsStore !== null) {
+            setMenuData(menuItemsStore);
+            return;
+        };
         const obtenerMenu = async () => {
             const menu = await fetchMenu(1);
+            setMenuItemsStore(menu);
             setMenuData(menu);
         }
         obtenerMenu();
@@ -31,7 +39,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
 
 
 
-    const filterMenuData = (search: string): MenuGroup[] => {
+    const filterMenuData = useCallback((search: string): MenuGroup[] => {
         if (!search.trim()) return menuData
 
         return menuData.map(group => {
@@ -68,7 +76,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
             }
             return null
         }).filter((group): group is MenuGroup => group !== null)
-    }
+    }, [menuData]);
 
     const filteredMenuData = filterMenuData(searchTerm);
 
