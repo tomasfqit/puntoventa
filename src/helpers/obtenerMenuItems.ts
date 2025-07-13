@@ -1,6 +1,4 @@
 import { MenuGroup } from "@/constants/MenuItems";
-import { Home } from "lucide-react";
-import { iconMap } from ".";
 type RawMenuRow = {
   usuario_id: number;
   rol: string;
@@ -36,7 +34,7 @@ export const obtenerMenuItems = (rows: RawMenuRow[]): MenuGroup[] => {
     if (!menu) {
       menu = {
         title: row.menu,
-        icon: iconMap[row.icono] || Home,
+        icon: row.icono,
         path: row.menu_path,
         // Solo definir `submenu` si hay submenu_id
         ...(row.submenu_id ? { submenu: [] } : {}),

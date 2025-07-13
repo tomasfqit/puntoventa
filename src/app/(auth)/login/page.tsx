@@ -2,12 +2,14 @@
 
 import type React from "react"
 
+import { fetchMenu } from "@/api/menuApi"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { setToken } from "@/helpers"
 import { useLogin } from "@/services/usuario/useUsuarioLogin"
+import { useAuthLocalStorage } from "@/store/authStore"
 import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -15,6 +17,7 @@ import { useState } from "react"
 export default function LoginForm() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false)
+    const { setMenuItemsStore } = useAuthLocalStorage();
     const { mutate: login, isPending } = useLogin();
     const [formData, setFormData] = useState({
         username: "",
@@ -30,8 +33,10 @@ export default function LoginForm() {
 
         // Simular llamada a API
         login({ username: formData.username, password: formData.password }, {
-            onSuccess: () => {
+            onSuccess: async () => {
                 setToken(formData.username);
+                const menu = await fetchMenu(1);
+                setMenuItemsStore(menu);
                 router.push("/home");
             },
             onError: (error) => {

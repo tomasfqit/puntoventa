@@ -15,12 +15,13 @@ export const useAuthLocalStorage = () => {
     return localStorage.removeItem("token");
   }, []);
 
-  const menuItemsStore = useMemo(() => {
+  const menuItemsStore: MenuGroup[] = useMemo(() => {
     const menuItems = localStorage.getItem("menuItems");
     if (menuItems) {
-      return JSON.parse(menuItems);
+      const menu = structuredClone(JSON.parse(menuItems));
+      return menu;
     }
-    return null;
+    return [];
   }, []);
 
   const setMenuItemsStore = useCallback((menuItems: MenuGroup[]) => {

@@ -23,6 +23,7 @@ export function Header({ onToggleSidebar, title = "Mi Aplicación" }: HeaderProp
     const router = useRouter();
     const handleLogout = () => {
         setToken("");
+        localStorage.clear();
         router.push("/login");
     }
 

@@ -1,15 +1,15 @@
 "use client"
 
-import { fetchMenu } from "@/api/menuApi"
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/MenuItems"
+import { GetIconLucideMenuItem } from "@/helpers/IconMenuItem"
 import { useAuthLocalStorage } from "@/store/authStore"
 import {
     ChevronRight
 } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { Input } from "./ui/input"
 
 
@@ -17,27 +17,10 @@ import { Input } from "./ui/input"
 // Datos del menú
 
 export function Sidebar({ isOpen }: SidebarProps) {
-    const { menuItemsStore, setMenuItemsStore } = useAuthLocalStorage();
+    const { menuItemsStore: menuData } = useAuthLocalStorage();
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
     const localPath = usePathname();
-    const [menuData, setMenuData] = useState<MenuGroup[]>([]);
-
-    useEffect(() => {
-        console.log('menuItemsStore =>', menuItemsStore);
-        if (menuItemsStore !== null) {
-            setMenuData(menuItemsStore);
-            return;
-        };
-        const obtenerMenu = async () => {
-            const menu = await fetchMenu(1);
-            setMenuItemsStore(menu);
-            setMenuData(menu);
-        }
-        obtenerMenu();
-    }, []);
-
-
 
     const filterMenuData = useCallback((search: string): MenuGroup[] => {
         if (!search.trim()) return menuData
@@ -78,6 +61,8 @@ export function Sidebar({ isOpen }: SidebarProps) {
         }).filter((group): group is MenuGroup => group !== null)
     }, [menuData]);
 
+
+
     const filteredMenuData = filterMenuData(searchTerm);
 
     return (
@@ -103,6 +88,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
                                 <div className="h-[1px] bg-gray-100 w-full"></div>
                             </div>
                             <ul className="space-y-1">
+
                                 {group.items.map((item) => (
                                     <li key={item.title}>
                                         {item.submenu ? (
@@ -121,7 +107,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
                                                     color: localPath === item.path ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)",
                                                 }}
                                             >
-                                                <item.icon className="mr-3 h-4 w-4" />
+                                                <GetIconLucideMenuItem icon={item.icon} size={16} color="black" />
                                                 {item.title}
                                             </Button>
                                         )}
@@ -149,7 +135,7 @@ function MenuItemWithSubmenu({ item }: { item: MenuItem }) {
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleTrigger asChild>
                 <Button variant="ghost" className="w-full justify-start h-10 px-2 text-gray-700 hover:bg-gray-100">
-                    <item.icon className="mr-3 h-4 w-4" />
+                    <GetIconLucideMenuItem icon={item.icon} size={16} color="black" />
                     {item.title}
                     <ChevronRight className={`ml-auto h-4 w-4 transition-transform ${isOpen ? "rotate-90" : ""}`} />
                 </Button>
