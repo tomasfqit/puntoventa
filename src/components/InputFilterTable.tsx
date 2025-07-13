@@ -3,7 +3,7 @@ import { RefObject } from "react";
 import { Input } from "./ui/input";
 
 interface InputFilterTableProps {
-    gridRef: RefObject<AgGridReact<any> | null>;
+    gridRef: RefObject<AgGridReact<unknown> | null>;
 }
 
 const InputFilterTable = ({ gridRef }: InputFilterTableProps) => {
