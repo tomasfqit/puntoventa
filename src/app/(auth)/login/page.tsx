@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { fetchMenu } from "@/api/menuApi"
+import { menuApi } from "@/api/menuApi"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,6 +10,7 @@ import { useLogin } from "@/services/usuario/useUsuarioLogin"
 import { useAuthLocalStorage } from "@/store/authStore"
 import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react"
 import { useRouter } from "next/navigation"
+import type React from "react"
 import { useState } from "react"
 
 export default function LoginForm() {
@@ -35,7 +34,7 @@ export default function LoginForm() {
         login({ username: formData.username, password: formData.password }, {
             onSuccess: async () => {
                 setToken(formData.username);
-                const menu = await fetchMenu(1);
+                const menu = await menuApi.fetchMenuUsuario(1);
                 setMenuItemsStore(menu);
                 router.push("/home");
             },

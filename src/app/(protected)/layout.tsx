@@ -1,12 +1,15 @@
 "use client";
-import { Header } from "@/components/header";
 import { Loading } from "@/components/Loading";
+import { Header } from "@/components/header";
 import { MainContent } from "@/components/main-content";
 import { Sidebar } from "@/components/sidebar";
 import { useAuth } from "@/hooks/useAuth";
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 export default function DashboardLayout({
   children,
 }: {
