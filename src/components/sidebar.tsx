@@ -1,13 +1,14 @@
 "use client"
 
+import { fetchMenu } from "@/api/menuApi"
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { MenuGroup, MenuItem, SidebarProps, SubMenuItem, menuData } from "@/constants/menuItems"
+import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/MenuItems"
 import {
     ChevronRight
 } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "./ui/input"
 
 
@@ -18,10 +19,22 @@ export function Sidebar({ isOpen }: SidebarProps) {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
     const localPath = usePathname();
-    const filterMenuData = (data: MenuGroup[], search: string): MenuGroup[] => {
-        if (!search.trim()) return data
+    const [menuData, setMenuData] = useState<MenuGroup[]>([]);
 
-        return data.map(group => {
+    useEffect(() => {
+        const obtenerMenu = async () => {
+            const menu = await fetchMenu(1);
+            setMenuData(menu);
+        }
+        obtenerMenu();
+    }, []);
+
+
+
+    const filterMenuData = (search: string): MenuGroup[] => {
+        if (!search.trim()) return menuData
+
+        return menuData.map(group => {
             const filteredItems = group.items.filter((item: MenuItem) => {
                 // Buscar en el título del item principal
                 const mainTitleMatch = item.title.toLowerCase().includes(search.toLowerCase())
@@ -57,7 +70,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
         }).filter((group): group is MenuGroup => group !== null)
     }
 
-    const filteredMenuData = filterMenuData(menuData, searchTerm);
+    const filteredMenuData = filterMenuData(searchTerm);
 
     return (
         <aside

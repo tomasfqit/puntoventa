@@ -1,4 +1,12 @@
 import { ErrorTypeSupabase } from "@/interfaces/Common";
+import {
+  Home,
+  LucideProps,
+  Package,
+  ShieldBan,
+  Users,
+  Warehouse,
+} from "lucide-react";
 
 export const isAuthenticated = () => {
   const token = localStorage.getItem("token");
@@ -19,4 +27,17 @@ export const removeToken = () => {
 
 export const errorApiSupabase = (error: ErrorTypeSupabase) => {
   throw error;
+};
+
+export const iconMap: Record<
+  string,
+  React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >
+> = {
+  Home,
+  Package,
+  Users,
+  ShieldBan,
+  Warehouse,
 };
