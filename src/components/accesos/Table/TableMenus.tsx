@@ -20,7 +20,7 @@ export const TableMenus = () => {
 
     // Container: Defines the grid's theme & dimensions.
     return (
-        <div className='w-full h-[70vh]'>
+        <div className='w-full h-[100%]'>
             <AgGridReact
                 rowData={menus}
                 columnDefs={colDefs}

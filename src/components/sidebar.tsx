@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/MenuItems"
+import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/menuItems"
 import { GetIconLucideMenuItem } from "@/helpers/IconMenuItem"
 import { useAuthLocalStorage } from "@/store/authStore"
 import {
