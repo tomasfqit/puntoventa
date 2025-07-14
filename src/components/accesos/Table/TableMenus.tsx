@@ -1,5 +1,6 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
+import { Menu } from "@/interfaces/Table";
 import { ITableMenus } from "@/interfaces/TableActionsProps";
 import { useMenuList } from "@/services/menus/useMenuList";
 import type { ICellRendererParams } from "ag-grid-community";
@@ -21,7 +22,7 @@ export const TableMenus = ({ setOpenModalConfirmarEliminar, setItemSeleccionado,
     const gridRef = useRef<AgGridReact>(null);
     const { data: menus } = useMenuList();
 
-    const colDefs: ColDef<ITableMenus>[] = [
+    const colDefs: ColDef<Menu>[] = [
         { field: "titulo", headerName: "Nombre" },
         { field: "path", headerName: "URL" },
         { field: "icono", headerName: "Icono" },

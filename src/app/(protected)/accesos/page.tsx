@@ -2,14 +2,14 @@
 import { ModalMantMenu } from "@/components/accesos/Modal/ModalMantMenu";
 import { TableMenus } from "@/components/accesos/Table/TableMenus";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
-import { ITableMenus } from "@/interfaces/TableActionsProps";
+import { Menu } from "@/interfaces/Table";
 import { useState } from "react";
 
 const Accesos = () => {
 
     const [openModalConfirmarEliminar, setOpenModalConfirmarEliminar] = useState(false);
     const [openModalMant, setOpenModalMant] = useState(false);
-    const [itemSeleccionado, setItemSeleccionado] = useState<ITableMenus>();
+    const [itemSeleccionado, setItemSeleccionado] = useState<Menu>();
 
     return (
         <div className="flex flex-col gap-2 w-full h-full">

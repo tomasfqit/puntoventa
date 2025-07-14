@@ -146,6 +146,7 @@ export interface Menu {
   created_at?: string;
   updated_at?: string;
   deleted_at?: string | null;
+  actions?: unknown;
 }
 
 export interface SubMenu {
