@@ -1,13 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@/components/ui/dialog";
 import { Menu } from "@/interfaces/Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
@@ -49,7 +47,7 @@ export const ModalMantMenu = ({
                         <TabsContent value="account" className="overflow-y-auto">
                             <MenuForm
                                 initialData={itemSeleccionado}
-                                onSubmit={() => { }}
+                                onSubmit={onConfirm}
                                 onCancel={() => { }}
                                 isLoading={false}
                             />
@@ -62,14 +60,14 @@ export const ModalMantMenu = ({
                     </Tabs>
 
                 </div>
-                <DialogFooter className="flex justify-end border-t border-gray-200 pt-2">
+                {/* <DialogFooter className="flex justify-end border-t border-gray-200 pt-2">
                     <Button variant="ghost" onClick={() => onOpenChange(false)}>
                         Cancelar
                     </Button>
                     <Button variant="default" onClick={onConfirm}>
                         Guardar
                     </Button>
-                </DialogFooter>
+                </DialogFooter> */}
             </DialogContent>
         </Dialog>
     );

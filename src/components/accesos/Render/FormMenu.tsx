@@ -60,7 +60,7 @@ export function MenuForm({
     }
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Grupo ID */}
             <div className="space-y-2">
                 <Label htmlFor="grupo_id">Grupo *</Label>
