@@ -1,20 +1,25 @@
 import InputFilterTable from "@/components/InputFilterTable";
 import { Button } from "@/components/ui/button";
-import { Menu } from "@/interfaces/Table";
+import { ITableMenus } from "@/interfaces/TableActionsProps";
 import { useMenuList } from "@/services/menus/useMenuList";
 import type { ICellRendererParams } from "ag-grid-community";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
-interface ITableMenus extends Menu {
-    actions: React.ReactNode;
+
+
+interface PropsTableMenus {
+    setOpenModalEditar?: (open: boolean) => void;
+    setOpenModalConfirmarEliminar?: (open: boolean) => void;
+    setItemSeleccionado: (item?: ITableMenus) => void;
+    setOpenModalMant: (open: boolean) => void;
+    itemSeleccionado?: ITableMenus;
 }
 
-export const TableMenus = () => {
+export const TableMenus = ({ setOpenModalConfirmarEliminar, setItemSeleccionado, setOpenModalMant }: PropsTableMenus) => {
     const gridRef = useRef<AgGridReact>(null);
-
-    const { data: menus } = useMenuList(); // sin filtro, todo el dataset
+    const { data: menus } = useMenuList();
 
     const colDefs: ColDef<ITableMenus>[] = [
         { field: "titulo", headerName: "Nombre" },
@@ -32,11 +37,15 @@ export const TableMenus = () => {
                 return (
                     <div className="flex flex-row gap-2">
                         <Button variant="default" size="icon" className="size-8" onClick={() => {
-                            console.log(params.data);
+                            setItemSeleccionado?.(params.data!);
+                            setOpenModalMant(true);
                         }}>
                             <Edit className="w-4 h-4" />
                         </Button>
-                        <Button variant="destructive" size="icon" className="size-8">
+                        <Button variant="destructive" size="icon" className="size-8" onClick={() => {
+                            setOpenModalConfirmarEliminar?.(true);
+                            setItemSeleccionado?.(params.data!);
+                        }}>
                             <Trash2 className="w-4 h-4" />
                         </Button>
                     </div>
@@ -47,7 +56,7 @@ export const TableMenus = () => {
 
     const defaultColDef = {
         flex: 1,
-        filter: true, // opcional si quieres también column filter
+        filter: true,
     };
 
 
@@ -56,14 +65,15 @@ export const TableMenus = () => {
         <div className="flex flex-col p-2 bg-white rounded-md gap-2 w-full h-full">
             <div className="flex flex-row gap-2">
                 <InputFilterTable gridRef={gridRef} />
-                <Button variant="default">
+                <Button variant="default" onClick={() => {
+                    setItemSeleccionado(undefined);
+                    setOpenModalMant(true);
+                }}>
                     <PlusIcon className="w-4 h-4" />
                     Nuevo
                 </Button>
             </div>
-
-            {/* 🔧 Importante: aplicar el theme aquí */}
-            <div className="ag-theme-alpine w-full h-[calc(100vh-200px)]">
+            <div className="ag-theme-alpine w-full h-full">
                 <AgGridReact
                     ref={gridRef}
                     rowData={menus}
@@ -71,6 +81,7 @@ export const TableMenus = () => {
                     defaultColDef={defaultColDef}
                 />
             </div>
+
         </div>
     );
 };
