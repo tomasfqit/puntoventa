@@ -1,4 +1,4 @@
-import Providers from "@/components/Providers";
+import Providers from "@/components/layout/Providers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Public_Sans } from "next/font/google";
 import "./globals.css";

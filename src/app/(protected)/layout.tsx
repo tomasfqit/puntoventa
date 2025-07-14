@@ -1,8 +1,8 @@
 "use client";
-import { Loading } from "@/components/Loading";
-import { Header } from "@/components/header";
-import { MainContent } from "@/components/main-content";
-import { Sidebar } from "@/components/sidebar";
+import { Loading } from "@/components/layout/Loading";
+import { Header } from "@/components/layout/header";
+import { MainContent } from "@/components/layout/main-content";
+import { Sidebar } from "@/components/layout/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { useRouter } from "next/navigation";

@@ -1,4 +1,4 @@
-import InputFilterTable from "@/components/InputFilterTable";
+import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
 import { ITableMenus } from "@/interfaces/TableActionsProps";
 import { useMenuList } from "@/services/menus/useMenuList";

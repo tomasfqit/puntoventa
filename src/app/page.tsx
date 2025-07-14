@@ -1,5 +1,5 @@
 "use client";
-import { Loading } from '@/components/Loading';
+import { Loading } from '@/components/layout/Loading';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

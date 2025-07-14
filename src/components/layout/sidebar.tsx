@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/menuItems"
+import { MenuGroup, MenuItem, SidebarProps, SubMenuItem } from "@/constants/MenuItems"
 import { GetIconLucideMenuItem } from "@/helpers/IconMenuItem"
 import { useAuthLocalStorage } from "@/store/authStore"
 import {
@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
-import { Input } from "./ui/input"
+import { Input } from "../ui/input"
 
 
 

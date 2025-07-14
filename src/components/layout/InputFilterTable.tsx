@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import { RefObject } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 interface InputFilterTableProps {
     gridRef: RefObject<AgGridReact<unknown> | null>;
