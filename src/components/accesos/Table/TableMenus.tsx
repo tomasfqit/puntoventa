@@ -20,7 +20,7 @@ interface PropsTableMenus {
 
 export const TableMenus = ({ setOpenModalConfirmarEliminar, setItemSeleccionado, setOpenModalMant }: PropsTableMenus) => {
     const gridRef = useRef<AgGridReact>(null);
-    const { data: menus } = useMenuList();
+    const { data: menus, isPending } = useMenuList();
 
     const colDefs: ColDef<Menu>[] = [
         { field: "titulo", headerName: "Nombre" },
@@ -80,6 +80,7 @@ export const TableMenus = ({ setOpenModalConfirmarEliminar, setItemSeleccionado,
                     rowData={menus}
                     columnDefs={colDefs}
                     defaultColDef={defaultColDef}
+                    loading={isPending}
                 />
             </div>
 

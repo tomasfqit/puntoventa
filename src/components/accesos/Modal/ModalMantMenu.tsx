@@ -29,11 +29,10 @@ export const ModalMantMenu = ({
     itemSeleccionado,
 }: ConfirmDeleteDialogProps) => {
 
-    console.log('itemSeleccionado =>', itemSeleccionado);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="flex flex-col min-w-[70vw] h-[85vh]">
+            <DialogContent className="flex flex-col min-w-[70vw] h-auto">
                 <DialogHeader className="flex flex-col gap-2 border-b border-gray-200 pb-2">
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>{subTitle}</DialogDescription>
@@ -44,7 +43,7 @@ export const ModalMantMenu = ({
                             <TabsTrigger className="data-[state=active]:bg-gray-200 rounded-lg p-1" value="account">Datos del menú</TabsTrigger>
                             <TabsTrigger className="data-[state=active]:bg-gray-200 rounded-lg p-1" value="password">Acciones</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="account" className="overflow-y-auto">
+                        <TabsContent value="account" className="overflow-y-auto h-[30vh]">
                             <MenuForm
                                 initialData={itemSeleccionado}
                                 onSubmit={onConfirm}
@@ -52,7 +51,7 @@ export const ModalMantMenu = ({
                                 isLoading={false}
                             />
                         </TabsContent>
-                        <TabsContent value="password">
+                        <TabsContent value="password" className="overflow-y-auto h-[30vh]">
                             <div>
                                 <h1>Password</h1>
                             </div>
