@@ -160,13 +160,14 @@ export interface SubMenu {
   deleted_at?: string | null;
 }
 
-export interface Rol {
-  id: number;
+export interface IDBTableRol {
+  id?: number;
   nombre: string;
-  descripcion?: string;
+  descripcion: string;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string | null;
+  actions?: unknown;
 }
 
 export interface RolMenu {
