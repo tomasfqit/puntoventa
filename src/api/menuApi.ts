@@ -1,5 +1,4 @@
 import { errorApiSupabase } from "@/helpers";
-import { obtenerMenuItems } from "@/helpers/obtenerMenuItems";
 import { Menu } from "@/interfaces/Table";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -11,8 +10,7 @@ export const menuApi = {
         .select("*")
         .eq("usuario_id", userId);
       if (error) errorApiSupabase(error);
-      const menuItems = obtenerMenuItems(data || []);
-      return menuItems;
+      return data;
     } catch (error) {
       console.error("Error al obtener el menú:", error);
       return [];

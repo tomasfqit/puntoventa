@@ -1,3 +1,4 @@
+import { FlatMenuItem, NestedMenuItem } from "@/constants/MenuItems";
 import { ErrorTypeSupabase } from "@/interfaces/Common";
 import {
   Home,
@@ -42,3 +43,27 @@ export const iconMap: Record<
   ShieldBan,
   Warehouse,
 };
+
+export function transformToNestedMenu(
+  flatMenu: FlatMenuItem[]
+): NestedMenuItem[] {
+  const menuMap = new Map<string, NestedMenuItem>();
+
+  for (const item of flatMenu) {
+    const menuTitle = item.menunombre;
+    if (!menuMap.has(menuTitle)) {
+      menuMap.set(menuTitle, {
+        title: menuTitle,
+        items: [],
+      });
+    }
+
+    const menu = menuMap.get(menuTitle)!;
+    menu.items.push({
+      title: item.submenunombre,
+      path: item.path,
+    });
+  }
+
+  return Array.from(menuMap.values());
+}

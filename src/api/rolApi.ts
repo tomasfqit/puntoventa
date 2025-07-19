@@ -22,4 +22,9 @@ export const rolApi = {
     if (error) errorApiSupabase(error);
     return status === 201 ? true : false;
   },
+  deleteRol: async (id: number) => {
+    const { error, status } = await supabase.from("rol").delete().eq("id", id);
+    if (error) errorApiSupabase(error);
+    return status === 204 ? true : false;
+  },
 };

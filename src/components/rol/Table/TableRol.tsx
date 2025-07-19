@@ -1,7 +1,6 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
 import { IDBTableRol } from "@/interfaces/Table";
-import { ITableMenus } from "@/interfaces/TableActionsProps";
 import { useRolList } from "@/services/rol/useRolList";
 import type { ICellRendererParams } from "ag-grid-community";
 import { ColDef } from "ag-grid-community";
@@ -12,9 +11,9 @@ import { useRef } from "react";
 interface PropsTableRol {
   setOpenModalEditar?: (open: boolean) => void;
   setOpenModalConfirmarEliminar?: (open: boolean) => void;
-  setItemSeleccionado: (item?: ITableMenus) => void;
+  setItemSeleccionado: (item?: IDBTableRol) => void;
   setOpenModalMant: (open: boolean) => void;
-  itemSeleccionado?: ITableMenus;
+  itemSeleccionado?: IDBTableRol;
 }
 
 export const TableRolUI = ({
@@ -37,7 +36,7 @@ export const TableRolUI = ({
       maxWidth: 110,
       pinned: "right",
       cellClass: "flex justify-center items-center",
-      cellRenderer: (params: ICellRendererParams<ITableMenus>) => {
+      cellRenderer: (params: ICellRendererParams<IDBTableRol>) => {
         return (
           <div className="flex flex-row gap-2">
             <Button
