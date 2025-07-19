@@ -2,6 +2,7 @@ import { FormInput } from "@/components/ui/app-components/FormInput";
 import { FormInputNumber } from "@/components/ui/app-components/FormInputNumber";
 import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/useModal";
 import { Producto } from "@/interfaces/Table";
 import { useCategoriasList } from "@/services/categorias/useCategoriasList";
 import { useMarcaList } from "@/services/marca/useMarcaList";
@@ -20,13 +21,13 @@ export function FormProducto({
   initialData,
   isLoading = false,
 }: FormProductoProps) {
+  const { closeModal } = useModal();
   const { data: marcas } = useMarcaList();
   const { data: modelos } = useModeloList();
   const { data: categorias } = useCategoriasList();
   const { mutate: createProducto, isPending } = useProductoCreate();
   const {
     handleSubmit,
-    reset,
     control,
     register,
     formState: { errors },
@@ -42,23 +43,18 @@ export function FormProducto({
   });
 
   const handleFormSubmit = async (data: SFormProductoData) => {
-    try {
-      console.log("data aaaaaaaaaaa=>", data);
-      createProducto(data, {
-        onSuccess: () => {
-          console.log("Producto creado con exito");
-        },
-        onError: (error) => {
-          console.error("Error creando producto:", error);
-        },
-        onSettled: () => {
-          console.log("Producto creado con exito");
-        },
-      });
-      reset();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    createProducto(data, {
+      onSuccess: () => {
+        console.log("Producto creado con exito");
+        closeModal();
+      },
+      onError: (error) => {
+        console.error("Error creando producto:", error);
+      },
+      onSettled: () => {
+        console.log("Producto creado con exito");
+      },
+    });
   };
 
   return (
@@ -146,7 +142,7 @@ export function FormProducto({
             disabled={isPending || isLoading}
             type="button"
             variant="outline"
-            onClick={() => console.log("cancelar")}
+            onClick={() => closeModal()}
           >
             Cancelar
           </Button>

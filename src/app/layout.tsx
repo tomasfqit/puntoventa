@@ -1,4 +1,5 @@
 import Providers from "@/components/layout/Providers";
+import { CustomModal } from "@/components/ui/CustomModal";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Public_Sans } from "next/font/google";
 import "./globals.css";
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <CustomModal />
         </Providers>
       </body>
     </html>

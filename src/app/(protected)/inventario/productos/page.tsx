@@ -1,36 +1,30 @@
 "use client";
 
-import { ModalMantMarca } from "@/components/inventario/Modal/ModalMantMarca";
-import { ModalMantProductos } from "@/components/inventario/Modal/ModalMantProductos";
+import { FormProducto } from "@/components/inventario/Render/FormProducto";
 import { TableProductos } from "@/components/inventario/Table/TableProductos";
-import { Producto } from "@/interfaces/Table";
-import { useState } from "react";
+import { useModal } from "@/hooks/useModal";
 
 const ProductosPage = () => {
-  const [itemSeleccionado, setItemSeleccionado] = useState<Producto>();
-  const [openModalMant, setOpenModalMant] = useState(false);
-  const [openModalMantMarca, setOpenModalMantMarca] = useState(false);
+  const { openModal } = useModal();
+
+  const handleOpenModalProducto = () => {
+    openModal({
+      title: "Nuevo Producto",
+      subTitle: "Ingrese los datos del nuevo producto",
+      size: "lg",
+      viewFooter: false,
+      children: <FormProducto />,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4 w-full h-full bg-white rounded-md p-4">
       <h2 className="text-2xl font-bold">Productos</h2>
       <TableProductos
-        itemSeleccionado={itemSeleccionado}
-        setItemSeleccionado={setItemSeleccionado}
-        setOpenModalMant={setOpenModalMant}
+        itemSeleccionado={undefined}
+        setItemSeleccionado={() => {}}
+        setOpenModalMant={handleOpenModalProducto}
       />
-      {openModalMantMarca && (
-        <ModalMantMarca
-          open={openModalMantMarca}
-          onOpenChange={setOpenModalMantMarca}
-        />
-      )}
-      {openModalMant && (
-        <ModalMantProductos
-          open={openModalMant}
-          onOpenChange={setOpenModalMant}
-        />
-      )}
     </div>
   );
 };

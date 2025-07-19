@@ -1,6 +1,5 @@
 "use client";
 
-import { CustomModal } from "@/components/ui/CustomModal";
 import { Producto } from "@/interfaces/Table";
 import { FormProducto } from "../Render/FormProducto";
 interface ConfirmDeleteDialogProps {
@@ -14,23 +13,16 @@ interface ConfirmDeleteDialogProps {
 export const ModalMantProductos = ({
   open,
   onOpenChange,
-  title = "Nuevo Producto",
-  subTitle = "Ingrese los datos del nuevo producto",
   itemSeleccionado,
 }: ConfirmDeleteDialogProps) => {
-  console.log("itemSeleccionado =>", itemSeleccionado);
+  console.log("itemSeleccionado =>", open);
   return (
-    <CustomModal
-      open={open}
-      onOpenChange={onOpenChange}
-      title={title}
-      subTitle={subTitle}
-      size="lg"
-      viewFooter={false}
-    >
-      <div className="flex w-full h-full">
-        <FormProducto initialData={itemSeleccionado} />
-      </div>
-    </CustomModal>
+    <FormProducto
+      initialData={itemSeleccionado}
+      onCloseModal={() => {
+        console.log("variables =>");
+        onOpenChange(false);
+      }}
+    />
   );
 };
