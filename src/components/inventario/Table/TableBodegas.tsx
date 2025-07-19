@@ -1,6 +1,6 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
-import { Producto } from "@/interfaces/Table";
+import { Bodega, Producto } from "@/interfaces/Table";
 import { useProductoUpdate } from "@/services/productos/useProductoUpdate";
 import { useProductosList } from "@/services/productos/useProductosList";
 import type { ICellRendererParams, NewValueParams } from "ag-grid-community";
@@ -10,20 +10,22 @@ import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-interface PropsTableMenus {
-  setOpenModalMant: (item?: Producto) => void;
-  setItemSeleccionado: (item?: Producto) => void;
-  setOpenModalConfirmarEliminar: (open: boolean) => void;
+interface PropsTableBodegas {
+  setOpenModalMant: (item?: Bodega) => void;
+  setOpenModalConfirmarEliminar?: (open: boolean) => void;
+  setItemSeleccionado: (item?: Bodega) => void;
+  itemSeleccionado?: Bodega;
 }
 
-export const TableProductos = ({
+export const TableBodegas = ({
+  setOpenModalConfirmarEliminar,
   setItemSeleccionado,
   setOpenModalMant,
-  setOpenModalConfirmarEliminar,
-}: PropsTableMenus) => {
+}: PropsTableBodegas) => {
   const gridRef = useRef<AgGridReact>(null);
   const { data: productos, isPending } = useProductosList();
   const { mutate: updateProducto } = useProductoUpdate();
+
   const handleUpdateProducto = (producto: Producto) => {
     updateProducto(
       { producto, id: producto.id },
@@ -69,7 +71,7 @@ export const TableProductos = ({
       maxWidth: 110,
       pinned: "right",
       cellClass: "flex justify-center items-center",
-      cellRenderer: (params: ICellRendererParams<Producto>) => {
+      cellRenderer: (params: ICellRendererParams<Bodega>) => {
         return (
           <div className="flex flex-row gap-2">
             <Button
@@ -88,9 +90,8 @@ export const TableProductos = ({
               size="icon"
               className="size-8"
               onClick={() => {
-                console.log("params =>", params.data);
-                setItemSeleccionado(params.data);
-                setOpenModalConfirmarEliminar(true);
+                setOpenModalConfirmarEliminar?.(true);
+                setItemSeleccionado(params.data!);
               }}
             >
               <Trash2 className="w-4 h-4" />

@@ -69,4 +69,17 @@ export const productosApi = {
       return null;
     }
   },
+  deleteProducto: async (id: number) => {
+    try {
+      const { error, status } = await supabase
+        .from("producto")
+        .delete()
+        .eq("id", id);
+      if (error) errorApiSupabase(error);
+      return status === 200 ? true : false;
+    } catch (error) {
+      console.error("Error al eliminar el producto:", error);
+      return null;
+    }
+  },
 };

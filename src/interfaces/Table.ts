@@ -90,12 +90,13 @@ export interface Almacen {
 }
 
 export interface Bodega {
-  id: number;
+  id?: number;
   nombre: string;
   almacen_id: number;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string | null;
+  actions?: unknown;
 }
 
 export interface Inventario {
