@@ -35,8 +35,10 @@ export const CustomModal = ({
         className={`flex flex-col min-w-[${size === "sm" ? "30" : size === "md" ? "50" : "70"}vw] h-[95vh]`}
       >
         <DialogHeader className="flex flex-col gap-2 border-b border-gray-200 pb-2">
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{subTitle}</DialogDescription>
+          <DialogTitle className="text-2xl font-bold ">{title}</DialogTitle>
+          <DialogDescription className="text-md text-gray-500">
+            {subTitle}
+          </DialogDescription>
         </DialogHeader>
         <div className="flex w-full h-full">{children}</div>
         {viewFooter && (

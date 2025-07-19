@@ -6,6 +6,7 @@ import { Producto } from "@/interfaces/Table";
 import { useCategoriasList } from "@/services/categorias/useCategoriasList";
 import { useMarcaList } from "@/services/marca/useMarcaList";
 import { useModeloList } from "@/services/modelo/useModeloList";
+import { useProductoCreate } from "@/services/productos/useProductoCreate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { SFormProductoData, formProductoSchema } from "./schemaFormProducto";
@@ -22,9 +23,9 @@ export function FormProducto({
   const { data: marcas } = useMarcaList();
   const { data: modelos } = useModeloList();
   const { data: categorias } = useCategoriasList();
+  const { mutate: createProducto, isPending } = useProductoCreate();
   const {
     handleSubmit,
-    formState: { isSubmitting },
     reset,
     control,
     register,
@@ -42,7 +43,18 @@ export function FormProducto({
 
   const handleFormSubmit = async (data: SFormProductoData) => {
     try {
-      console.log("data =>", data);
+      console.log("data aaaaaaaaaaa=>", data);
+      createProducto(data, {
+        onSuccess: () => {
+          console.log("Producto creado con exito");
+        },
+        onError: (error) => {
+          console.error("Error creando producto:", error);
+        },
+        onSettled: () => {
+          console.log("Producto creado con exito");
+        },
+      });
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -131,15 +143,15 @@ export function FormProducto({
       <div className="w-full flex justify-end mt-auto pt-4">
         <div className="flex gap-3">
           <Button
-            disabled={isSubmitting || isLoading}
+            disabled={isPending || isLoading}
             type="button"
             variant="outline"
             onClick={() => console.log("cancelar")}
           >
             Cancelar
           </Button>
-          <Button type="submit" disabled={isSubmitting || isLoading}>
-            {isSubmitting || isLoading ? "Guardando..." : "Guardar"}
+          <Button type="submit" disabled={isPending || isLoading}>
+            {isPending || isLoading ? "Guardando..." : "Guardar"}
           </Button>
         </div>
       </div>

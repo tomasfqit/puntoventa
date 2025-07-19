@@ -36,13 +36,13 @@ export const productosApi = {
 
   createProducto: async (producto: SFormProductoData) => {
     try {
-      const { data, error } = await supabase
+      const { error, status } = await supabase
         .from("producto")
         .insert([producto])
         .select();
 
       if (error) errorApiSupabase(error);
-      return data;
+      return status === 201 ? true : false;
     } catch (error) {
       console.error("Error al crear el producto:", error);
       return null;
