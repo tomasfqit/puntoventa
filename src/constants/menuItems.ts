@@ -31,12 +31,18 @@ export type FlatMenuItem = {
   rolnombre: string;
   path: string;
   usuario_id: number;
+  menu_path: string;
+  menu_orden: number;
+  sub_menu_orden: number;
 };
 
 export interface NestedMenuItem {
   title: string;
+  menuPath: string | null;
+  order: number;
   items: {
     title: string;
     path: string;
+    order: number;
   }[];
 }

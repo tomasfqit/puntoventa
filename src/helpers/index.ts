@@ -44,26 +44,36 @@ export const iconMap: Record<
   Warehouse,
 };
 
-export function transformToNestedMenu(
-  flatMenu: FlatMenuItem[]
-): NestedMenuItem[] {
-  const menuMap = new Map<string, NestedMenuItem>();
+export function transformToNestedMenu(data: FlatMenuItem[]): NestedMenuItem[] {
+  const menuMap = new Map<number, NestedMenuItem>();
 
-  for (const item of flatMenu) {
-    const menuTitle = item.menunombre;
-    if (!menuMap.has(menuTitle)) {
-      menuMap.set(menuTitle, {
-        title: menuTitle,
+  for (const row of data) {
+    const menuId = row.menuid;
+
+    if (!menuMap.has(menuId)) {
+      menuMap.set(menuId, {
+        title: row.menunombre,
+        menuPath: row.menu_path || null,
+        order: row.menu_orden || 999, // fallback en caso de que falte
         items: [],
       });
     }
 
-    const menu = menuMap.get(menuTitle)!;
-    menu.items.push({
-      title: item.submenunombre,
-      path: item.path,
-    });
+    if (row.submenuid && row.submenunombre && row.path) {
+      menuMap.get(menuId)!.items.push({
+        title: row.submenunombre,
+        path: row.path,
+        order: row.sub_menu_orden || 999,
+      });
+    }
   }
 
-  return Array.from(menuMap.values());
+  const sortedMenus = Array.from(menuMap.values())
+    .map((menu) => ({
+      ...menu,
+      items: menu.items.sort((a, b) => a.order - b.order), // ordenar submenús
+    }))
+    .sort((a, b) => a.order - b.order); // ordenar menús
+
+  return sortedMenus;
 }
