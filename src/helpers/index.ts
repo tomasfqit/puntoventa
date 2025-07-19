@@ -77,3 +77,17 @@ export function transformToNestedMenu(data: FlatMenuItem[]): NestedMenuItem[] {
 
   return sortedMenus;
 }
+
+export function sanitizeCurrencyInput(val: unknown): number | undefined {
+  if (typeof val !== "string" && typeof val !== "number") return undefined;
+  const cleaned = String(val).replace(/^\$/, "").trim();
+  const num = parseFloat(cleaned);
+  const res = isNaN(num) ? undefined : num;
+  return res;
+}
+export const errorMsgRequired = (field: string) => {
+  return `El campo ${field} es obligatorio`;
+};
+export const errorMsgTypeData = (field: string) => {
+  return `${field}: Tipo de dato incorrecto`;
+};

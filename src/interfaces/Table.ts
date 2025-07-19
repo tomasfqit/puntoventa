@@ -69,10 +69,11 @@ export interface Producto {
   id: number;
   nombre: string;
   descripcion?: string;
-  categoria_id?: number;
-  marca_id?: number;
-  modelo_id?: number;
-  precio: number;
+  categoria_id: number;
+  marca_id: number;
+  modelo_id: number;
+  precio_venta: number;
+  precio_compra: number;
   stock: number;
   created_at?: string;
   updated_at?: string;

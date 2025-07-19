@@ -1,3 +1,4 @@
+import { SFormProductoData } from "@/components/inventario/Render/schemaFormProducto";
 import { errorApiSupabase } from "@/helpers";
 import { obtenerMenuItems } from "@/helpers/obtenerMenuItems";
 import { Producto } from "@/interfaces/Table";
@@ -30,6 +31,21 @@ export const productosApi = {
     } catch (error) {
       console.error("Error al obtener el menú:", error);
       return [];
+    }
+  },
+
+  createProducto: async (producto: SFormProductoData) => {
+    try {
+      const { data, error } = await supabase
+        .from("producto")
+        .insert([producto])
+        .select();
+
+      if (error) errorApiSupabase(error);
+      return data;
+    } catch (error) {
+      console.error("Error al crear el producto:", error);
+      return null;
     }
   },
 };

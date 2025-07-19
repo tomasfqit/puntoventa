@@ -1,4 +1,5 @@
 import { FormInput } from "@/components/ui/app-components/FormInput";
+import { FormInputNumber } from "@/components/ui/app-components/FormInputNumber";
 import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { Producto } from "@/interfaces/Table";
@@ -7,28 +8,10 @@ import { useMarcaList } from "@/services/marca/useMarcaList";
 import { useModeloList } from "@/services/modelo/useModeloList";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-// Zod schema for Menu form validation
-const formProductoSchema = z.object({
-  marca_id: z.number().min(1, "La marca es requerida"),
-  categoria_id: z.number().min(1, "La categoría es requerida"),
-  modelo_id: z.number().min(1, "El modelo es requerido"),
-  nombre: z
-    .string()
-    .min(1, "El nombre es requerido")
-    .max(100, "El nombre no puede exceder 100 caracteres"),
-  precio: z.number().min(0, "El precio es requerido"),
-  stock: z.number().min(0, "El stock es requerido"),
-  descripcion: z.string().optional(),
-  imagen: z.string().optional(),
-  estado: z.boolean().optional(),
-});
-
-type FormProductoData = z.infer<typeof formProductoSchema>;
+import { SFormProductoData, formProductoSchema } from "./schemaFormProducto";
 
 interface FormProductoProps {
-  initialData?: Partial<Producto>;
+  initialData?: Producto;
   isLoading?: boolean;
 }
 
@@ -44,18 +27,20 @@ export function FormProducto({
     formState: { isSubmitting },
     reset,
     control,
+    register,
     formState: { errors },
-  } = useForm<FormProductoData>({
+  } = useForm<SFormProductoData>({
     resolver: zodResolver(formProductoSchema),
     defaultValues: {
       marca_id: initialData?.marca_id || 0,
       categoria_id: initialData?.categoria_id || 0,
       modelo_id: initialData?.modelo_id || 0,
       nombre: initialData?.nombre || "",
+      stock: initialData?.stock || 0,
     },
   });
 
-  const handleFormSubmit = async (data: FormProductoData) => {
+  const handleFormSubmit = async (data: SFormProductoData) => {
     try {
       console.log("data =>", data);
       reset();
@@ -67,9 +52,9 @@ export function FormProducto({
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="flex flex-col gap-4 w-full"
+      className="flex flex-col gap-2 w-full"
     >
-      <FormInput<FormProductoData>
+      <FormInput<SFormProductoData>
         name="nombre"
         label="Nombre *"
         type="text"
@@ -79,51 +64,68 @@ export function FormProducto({
         error={errors.nombre?.message}
       />
 
-      <FormInput<FormProductoData>
+      <FormInput<SFormProductoData>
         name="descripcion"
         label="Descripción"
-        type="text"
         placeholder="Ingrese la descripción"
         control={control}
         toUpperCase
         error={errors.descripcion?.message}
       />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <FormInputNumber<SFormProductoData>
+          name="precio_venta"
+          label="Precio de venta"
+          placeholder="Ingrese el precio de venta"
+          control={control}
+          error={errors.precio_venta?.message}
+          register={register}
+        />
+        <FormInputNumber<SFormProductoData>
+          name="precio_compra"
+          label="Precio de compra"
+          placeholder="Ingrese el precio de compra"
+          control={control}
+          error={errors.precio_compra?.message}
+          register={register}
+        />
 
-      <FormSelect<FormProductoData>
-        name="marca_id"
-        label="Marca *"
-        control={control}
-        options={(marcas || [])?.map((marca) => ({
-          label: marca.nombre,
-          value: marca.id,
-        }))}
-        placeholder="Seleccionar marca"
-        error={errors.marca_id?.message}
-      />
+        <FormSelect<SFormProductoData>
+          name="marca_id"
+          label="Marca *"
+          control={control}
+          options={(marcas || [])?.map((marca) => ({
+            label: marca.nombre,
+            value: marca.id,
+          }))}
+          placeholder="Seleccionar marca"
+          error={errors.marca_id?.message}
+        />
 
-      <FormSelect<FormProductoData>
-        name="categoria_id"
-        label="Categoría *"
-        control={control}
-        options={(categorias || [])?.map((categoria) => ({
-          label: categoria.nombre,
-          value: categoria.id,
-        }))}
-        placeholder="Seleccionar categoría"
-        error={errors.categoria_id?.message}
-      />
+        <FormSelect<SFormProductoData>
+          name="categoria_id"
+          label="Categoría *"
+          control={control}
+          options={(categorias || [])?.map((categoria) => ({
+            label: categoria.nombre,
+            value: categoria.id,
+          }))}
+          placeholder="Seleccionar categoría"
+          error={errors.categoria_id?.message}
+        />
 
-      <FormSelect<FormProductoData>
-        name="modelo_id"
-        label="Modelo *"
-        control={control}
-        options={(modelos || [])?.map((modelo) => ({
-          label: modelo.nombre,
-          value: modelo.id,
-        }))}
-        placeholder="Seleccionar modelo"
-        error={errors.modelo_id?.message}
-      />
+        <FormSelect<SFormProductoData>
+          name="modelo_id"
+          label="Modelo *"
+          control={control}
+          options={(modelos || [])?.map((modelo) => ({
+            label: modelo.nombre,
+            value: modelo.id,
+          }))}
+          placeholder="Seleccionar modelo"
+          error={errors.modelo_id?.message}
+        />
+      </div>
 
       {/* Form Actions */}
       <div className="w-full flex justify-end mt-auto pt-4">
