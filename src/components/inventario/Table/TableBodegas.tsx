@@ -1,8 +1,8 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
-import { Bodega, Producto } from "@/interfaces/Table";
-import { useProductoUpdate } from "@/services/productos/useProductoUpdate";
-import { useProductosList } from "@/services/productos/useProductosList";
+import { Bodega } from "@/interfaces/Table";
+import { useBodegasList } from "@/services/bodegas/useBodegasList";
+import { useBodegaUpdate } from "@/services/bodegas/useBodegasUpdate";
 import type { ICellRendererParams, NewValueParams } from "ag-grid-community";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -23,45 +23,29 @@ export const TableBodegas = ({
   setOpenModalMant,
 }: PropsTableBodegas) => {
   const gridRef = useRef<AgGridReact>(null);
-  const { data: productos, isPending } = useProductosList();
-  const { mutate: updateProducto } = useProductoUpdate();
+  const { data: bodegas, isPending } = useBodegasList();
+  const { mutate: updateBodega } = useBodegaUpdate();
 
-  const handleUpdateProducto = (producto: Producto) => {
-    updateProducto(
-      { producto, id: producto.id },
+  const handleUpdateBodega = (bodega: Bodega) => {
+    if (!bodega.id) return;
+    updateBodega(
+      { bodega, id: bodega.id },
       {
         onSuccess: () => {
-          toast.success("Producto actualizado con exito");
+          toast.success("Bodega actualizada con exito");
         },
       }
     );
   };
 
-  const colDefs: ColDef<Producto>[] = [
+  const colDefs: ColDef<Bodega>[] = [
     { field: "nombre", headerName: "Nombre" },
-    { field: "descripcion", headerName: "Descripción" },
     {
-      field: "precio_venta",
-      headerName: "Precio Venta",
+      field: "almacen_id",
+      headerName: "Almacen",
       editable: true,
-      onCellValueChanged(event: NewValueParams<Producto>) {
-        handleUpdateProducto(event.data);
-      },
-    },
-    {
-      field: "precio_compra",
-      headerName: "Precio Compra",
-      editable: true,
-      onCellValueChanged(event: NewValueParams<Producto>) {
-        handleUpdateProducto(event.data);
-      },
-    },
-    {
-      field: "stock",
-      headerName: "Stock",
-      editable: true,
-      onCellValueChanged(event: NewValueParams<Producto>) {
-        handleUpdateProducto(event.data);
+      onCellValueChanged(event: NewValueParams<Bodega>) {
+        handleUpdateBodega(event.data);
       },
     },
     {
@@ -118,13 +102,13 @@ export const TableBodegas = ({
           }}
         >
           <PlusIcon className="w-4 h-4" />
-          Nuevo Producto
+          Nueva Bodega
         </Button>
       </div>
       <div className="ag-theme-alpine w-full h-full">
         <AgGridReact
           ref={gridRef}
-          rowData={productos}
+          rowData={bodegas}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           loading={isPending}

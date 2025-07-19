@@ -3,9 +3,7 @@ import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/useModal";
 import { Bodega } from "@/interfaces/Table";
-import { useCategoriasList } from "@/services/categorias/useCategoriasList";
-import { useMarcaList } from "@/services/marca/useMarcaList";
-import { useModeloList } from "@/services/modelo/useModeloList";
+import { useAlmacenList } from "@/services/almacen/useMarcaList";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -17,9 +15,7 @@ interface FormBodegaProps {
 
 export function FormBodega({ initialData }: FormBodegaProps) {
   const { closeModal } = useModal();
-  const { data: marcas } = useMarcaList();
-  const { data: modelos } = useModeloList();
-  const { data: categorias } = useCategoriasList();
+  const { data: almacenes } = useAlmacenList();
 
   const {
     handleSubmit,
@@ -81,11 +77,11 @@ export function FormBodega({ initialData }: FormBodegaProps) {
         name="almacen_id"
         label="Almacen *"
         control={control}
-        options={(marcas || [])?.map((marca) => ({
-          label: marca.nombre,
-          value: marca.id,
+        options={(almacenes || [])?.map((almacen) => ({
+          label: almacen.nombre,
+          value: almacen.id,
         }))}
-        placeholder="Seleccionar marca"
+        placeholder="Seleccionar almacen"
         error={errors.almacen_id?.message}
       />
       {/* Form Actions */}

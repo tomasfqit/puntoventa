@@ -14,7 +14,7 @@ const BodegaPage = () => {
     openModal({
       title: "Nuevo Bodega",
       subTitle: "Ingrese los datos del nuevo bodega",
-      size: "lg",
+      size: "md",
       viewFooter: false,
       children: <FormBodega initialData={itemSeleccionado} />,
     });
