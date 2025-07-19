@@ -84,7 +84,7 @@ export const TableProductos = ({
           }}
         >
           <PlusIcon className="w-4 h-4" />
-          Nuevo
+          Nuevo Producto
         </Button>
       </div>
       <div className="ag-theme-alpine w-full h-full">
