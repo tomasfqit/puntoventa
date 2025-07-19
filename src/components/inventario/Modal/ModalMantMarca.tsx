@@ -11,11 +11,11 @@ interface ConfirmDeleteDialogProps {
   itemSeleccionado?: Producto;
 }
 
-export const ModalMantProductos = ({
+export const ModalMantMarca = ({
   open,
   onOpenChange,
-  title = "Nuevo Producto",
-  subTitle = "Ingrese los datos del nuevo producto",
+  title = "Nueva Marca",
+  subTitle = "Ingrese los datos de la nueva marca",
   itemSeleccionado,
 }: ConfirmDeleteDialogProps) => {
   console.log("itemSeleccionado =>", itemSeleccionado);
