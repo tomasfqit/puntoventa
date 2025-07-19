@@ -2,6 +2,7 @@ import z from "zod";
 
 // Form data type for Producto form
 export type SFormProductoData = {
+  id?: number;
   marca_id: number;
   categoria_id: number;
   modelo_id: number;

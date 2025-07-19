@@ -8,17 +8,17 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useProductoCreate = (
+export const useProductoUpdate = (
   mutationOptions?: UseMutationOptions<
     boolean | null,
     ErrorTypeSupabase,
-    SFormProductoData,
+    { producto: SFormProductoData; id: number },
     unknown
   >
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: productosApi.createProducto,
+    mutationFn: productosApi.updateProducto,
     onError: (err) => {
       toast.error(err.message);
     },

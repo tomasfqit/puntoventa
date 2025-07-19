@@ -48,4 +48,25 @@ export const productosApi = {
       return null;
     }
   },
+  updateProducto: async ({
+    producto,
+    id,
+  }: {
+    producto: SFormProductoData;
+    id: number;
+  }) => {
+    try {
+      const { error, status } = await supabase
+        .from("producto")
+        .update(producto)
+        .eq("id", id)
+        .select();
+
+      if (error) errorApiSupabase(error);
+      return status === 200 ? true : false;
+    } catch (error) {
+      console.error("Error al crear el producto:", error);
+      return null;
+    }
+  },
 };

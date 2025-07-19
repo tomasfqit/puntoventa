@@ -9,10 +9,9 @@ import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
 
 interface PropsTableMenus {
-  setOpenModalEditar?: (open: boolean) => void;
+  setOpenModalMant: (item?: Producto) => void;
   setOpenModalConfirmarEliminar?: (open: boolean) => void;
   setItemSeleccionado: (item?: Producto) => void;
-  setOpenModalMant: (open: boolean) => void;
   itemSeleccionado?: Producto;
 }
 
@@ -27,7 +26,8 @@ export const TableProductos = ({
   const colDefs: ColDef<Producto>[] = [
     { field: "nombre", headerName: "Nombre" },
     { field: "descripcion", headerName: "Descripción" },
-    { field: "precio", headerName: "Precio" },
+    { field: "precio_venta", headerName: "Precio Venta" },
+    { field: "precio_compra", headerName: "Precio Compra" },
     { field: "stock", headerName: "Stock" },
     {
       field: "actions",
@@ -44,8 +44,8 @@ export const TableProductos = ({
               size="icon"
               className="size-8"
               onClick={() => {
-                setItemSeleccionado?.(params.data!);
-                setOpenModalMant(true);
+                setItemSeleccionado(params.data!);
+                setOpenModalMant(params.data!);
               }}
             >
               <Edit className="w-4 h-4" />
@@ -56,7 +56,7 @@ export const TableProductos = ({
               className="size-8"
               onClick={() => {
                 setOpenModalConfirmarEliminar?.(true);
-                setItemSeleccionado?.(params.data!);
+                setItemSeleccionado(params.data!);
               }}
             >
               <Trash2 className="w-4 h-4" />
@@ -79,8 +79,7 @@ export const TableProductos = ({
         <Button
           variant="default"
           onClick={() => {
-            setItemSeleccionado(undefined);
-            setOpenModalMant(true);
+            setOpenModalMant();
           }}
         >
           <PlusIcon className="w-4 h-4" />

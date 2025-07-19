@@ -8,29 +8,31 @@ import { useCategoriasList } from "@/services/categorias/useCategoriasList";
 import { useMarcaList } from "@/services/marca/useMarcaList";
 import { useModeloList } from "@/services/modelo/useModeloList";
 import { useProductoCreate } from "@/services/productos/useProductoCreate";
+import { useProductoUpdate } from "@/services/productos/useProductoUpdate";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { SFormProductoData, formProductoSchema } from "./schemaFormProducto";
 
 interface FormProductoProps {
   initialData?: Producto;
-  isLoading?: boolean;
 }
 
-export function FormProducto({
-  initialData,
-  isLoading = false,
-}: FormProductoProps) {
+export function FormProducto({ initialData }: FormProductoProps) {
   const { closeModal } = useModal();
   const { data: marcas } = useMarcaList();
   const { data: modelos } = useModeloList();
   const { data: categorias } = useCategoriasList();
   const { mutate: createProducto, isPending } = useProductoCreate();
+  const { mutate: updateProducto, isPending: isPendingUpdate } =
+    useProductoUpdate();
   const {
     handleSubmit,
     control,
     register,
     formState: { errors },
+    reset,
   } = useForm<SFormProductoData>({
     resolver: zodResolver(formProductoSchema),
     defaultValues: {
@@ -39,22 +41,37 @@ export function FormProducto({
       modelo_id: initialData?.modelo_id || 0,
       nombre: initialData?.nombre || "",
       stock: initialData?.stock || 0,
+      precio_venta: initialData?.precio_venta || 0,
+      precio_compra: initialData?.precio_compra || 0,
+      descripcion: initialData?.descripcion || "",
     },
   });
 
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, [initialData, reset]);
+
   const handleFormSubmit = async (data: SFormProductoData) => {
-    createProducto(data, {
-      onSuccess: () => {
-        console.log("Producto creado con exito");
-        closeModal();
-      },
-      onError: (error) => {
-        console.error("Error creando producto:", error);
-      },
-      onSettled: () => {
-        console.log("Producto creado con exito");
-      },
-    });
+    if (initialData) {
+      updateProducto(
+        { producto: data, id: initialData.id },
+        {
+          onSuccess: () => {
+            toast.success("Producto actualizado con exito");
+            closeModal();
+          },
+        }
+      );
+    } else {
+      createProducto(data, {
+        onSuccess: () => {
+          toast.success("Producto creado con exito");
+          closeModal();
+        },
+      });
+    }
   };
 
   return (
@@ -80,6 +97,16 @@ export function FormProducto({
         toUpperCase
         error={errors.descripcion?.message}
       />
+      <div className="flex flex-col gap-2">
+        <FormInputNumber<SFormProductoData>
+          name="stock"
+          label="Stock *"
+          placeholder="Ingrese el stock"
+          control={control}
+          error={errors.stock?.message}
+          register={register}
+        />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <FormInputNumber<SFormProductoData>
           name="precio_venta"
@@ -139,15 +166,15 @@ export function FormProducto({
       <div className="w-full flex justify-end mt-auto pt-4">
         <div className="flex gap-3">
           <Button
-            disabled={isPending || isLoading}
+            disabled={isPending || isPendingUpdate}
             type="button"
             variant="outline"
             onClick={() => closeModal()}
           >
             Cancelar
           </Button>
-          <Button type="submit" disabled={isPending || isLoading}>
-            {isPending || isLoading ? "Guardando..." : "Guardar"}
+          <Button type="submit" disabled={isPending || isPendingUpdate}>
+            {isPending || isPendingUpdate ? "Guardando..." : "Guardar"}
           </Button>
         </div>
       </div>
