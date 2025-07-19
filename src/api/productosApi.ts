@@ -1,6 +1,6 @@
 import { errorApiSupabase } from "@/helpers";
 import { obtenerMenuItems } from "@/helpers/obtenerMenuItems";
-import { Menu } from "@/interfaces/Table";
+import { Producto } from "@/interfaces/Table";
 import { supabase } from "@/lib/supabaseClient";
 
 export const productosApi = {
@@ -18,14 +18,15 @@ export const productosApi = {
       return [];
     }
   },
-  fetchMenus: async () => {
+  fetchProductosList: async () => {
     try {
       const { data, error } = await supabase
-        .from("menu")
+        .from("producto")
         .select("*")
-        .order("grupo_id", { ascending: true });
+        .is("deleted_at", null)
+        .order("nombre", { ascending: true });
       if (error) errorApiSupabase(error);
-      return data as Menu[];
+      return data as Producto[];
     } catch (error) {
       console.error("Error al obtener el menú:", error);
       return [];

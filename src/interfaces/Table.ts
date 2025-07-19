@@ -77,6 +77,7 @@ export interface Producto {
   created_at?: string;
   updated_at?: string;
   deleted_at?: string | null;
+  actions?: unknown;
 }
 export interface Almacen {
   id: number;
