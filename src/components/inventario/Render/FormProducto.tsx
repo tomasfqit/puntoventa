@@ -2,15 +2,23 @@ import { FormInput } from "@/components/ui/app-components/FormInput";
 import { FormInputNumber } from "@/components/ui/app-components/FormInputNumber";
 import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useModal } from "@/hooks/useModal";
 import { Producto } from "@/interfaces/Table";
+import { useBodegasList } from "@/services/bodegas/useBodegasList";
 import { useCategoriasList } from "@/services/categorias/useCategoriasList";
 import { useMarcaList } from "@/services/marca/useMarcaList";
 import { useModeloList } from "@/services/modelo/useModeloList";
 import { useProductoCreate } from "@/services/productos/useProductoCreate";
 import { useProductoUpdate } from "@/services/productos/useProductoUpdate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { SFormProductoData, formProductoSchema } from "./schemaFormProducto";
@@ -20,13 +28,16 @@ interface FormProductoProps {
 }
 
 export function FormProducto({ initialData }: FormProductoProps) {
+  const [bodegaId, setBodegaId] = useState<number>(0);
   const { closeModal } = useModal();
   const { data: marcas } = useMarcaList();
   const { data: modelos } = useModeloList();
   const { data: categorias } = useCategoriasList();
+  const { data: bodegas } = useBodegasList();
   const { mutate: createProducto, isPending } = useProductoCreate();
   const { mutate: updateProducto, isPending: isPendingUpdate } =
     useProductoUpdate();
+
   const {
     handleSubmit,
     control,
@@ -65,12 +76,15 @@ export function FormProducto({ initialData }: FormProductoProps) {
         }
       );
     } else {
-      createProducto(data, {
-        onSuccess: () => {
-          toast.success("Producto creado con exito");
-          closeModal();
-        },
-      });
+      createProducto(
+        { producto: data, bodega_id: bodegaId },
+        {
+          onSuccess: () => {
+            toast.success("Producto creado con exito");
+            closeModal();
+          },
+        }
+      );
     }
   };
 
@@ -79,6 +93,21 @@ export function FormProducto({ initialData }: FormProductoProps) {
       onSubmit={handleSubmit(handleFormSubmit)}
       className="flex flex-col gap-2 w-full"
     >
+      <Select
+        value={String(bodegaId)}
+        onValueChange={(value) => setBodegaId(Number(value))}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Seleccionar bodega" />
+        </SelectTrigger>
+        <SelectContent>
+          {bodegas?.map((bodega) => (
+            <SelectItem key={bodega.id} value={String(bodega.id)}>
+              {bodega.nombre}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <FormInput<SFormProductoData>
         name="nombre"
         label="Nombre *"

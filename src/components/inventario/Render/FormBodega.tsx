@@ -2,6 +2,7 @@ import { FormInput } from "@/components/ui/app-components/FormInput";
 import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Bodega } from "@/interfaces/Table";
 import { useAlmacenList } from "@/services/almacen/useAlmacenList";
 import { useBodegaCreate } from "@/services/bodegas/useBodegasCreate";
@@ -21,6 +22,8 @@ export function FormBodega({ initialData }: FormBodegaProps) {
   const { data: almacenes } = useAlmacenList();
   const { mutate: updateBodega } = useBodegaUpdate();
   const { mutate: createBodega } = useBodegaCreate();
+  const { getParam, clearParams } = useQueryParams();
+  const idBodega = getParam("bodega_id");
 
   const {
     handleSubmit,
@@ -30,7 +33,6 @@ export function FormBodega({ initialData }: FormBodegaProps) {
   } = useForm<Bodega>({
     resolver: zodResolver(formBodegaSchema),
     defaultValues: {
-      id: initialData?.id || 0,
       nombre: initialData?.nombre || "",
       almacen_id: initialData?.almacen_id || 0,
     },
@@ -43,14 +45,15 @@ export function FormBodega({ initialData }: FormBodegaProps) {
   }, [initialData, reset]);
 
   const handleFormSubmit = async (data: Bodega) => {
-    console.log("initialData =>", data);
-    if (initialData?.id) {
+    const id = idBodega ? Number(idBodega) : 0;
+    if (id) {
       updateBodega(
-        { bodega: data, id: initialData.id },
+        { bodega: data, id },
         {
           onSuccess: () => {
             toast.success("Bodega actualizada con exito");
             closeModal();
+            clearParams();
           },
         }
       );
@@ -59,6 +62,7 @@ export function FormBodega({ initialData }: FormBodegaProps) {
         onSuccess: () => {
           toast.success("Bodega creada con exito");
           closeModal();
+          clearParams();
         },
       });
     }

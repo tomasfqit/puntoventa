@@ -23,15 +23,99 @@ export const productosApi = {
     if (error) errorApiSupabase(error);
     return data as Producto[];
   },
+  createProducto: async ({
+    producto,
+    bodega_id,
+  }: {
+    producto: SFormProductoData;
+    bodega_id: number;
+  }) => {
+    const { stock, ...productoData } = producto;
 
-  createProducto: async (producto: SFormProductoData) => {
-    const { error, status } = await supabase
+    // 1. Insertar el producto
+    const { data: productoInsertado, error: errorProducto } = await supabase
       .from("producto")
-      .insert([producto])
-      .select();
+      .insert([productoData])
+      .select()
+      .single();
 
-    if (error) errorApiSupabase(error);
-    return status === 201 ? true : false;
+    if (errorProducto) {
+      errorApiSupabase(errorProducto);
+      return false;
+    }
+
+    const producto_id = productoInsertado.id;
+
+    // 2. Verificar si ya existe en inventario esa combinación producto-bodega
+    const { data: inventarioExistente, error: errorInventarioConsulta } =
+      await supabase
+        .from("inventario")
+        .select("id, cantidad")
+        .eq("producto_id", producto_id)
+        .eq("bodega_id", bodega_id)
+        .maybeSingle();
+
+    if (errorInventarioConsulta) {
+      errorApiSupabase(errorInventarioConsulta);
+      return false;
+    }
+
+    if (inventarioExistente) {
+      // Ya existe → sumar la cantidad
+      const nuevaCantidad = inventarioExistente.cantidad + stock;
+
+      const { error: errorUpdate } = await supabase
+        .from("inventario")
+        .update({ cantidad: nuevaCantidad })
+        .eq("id", inventarioExistente.id);
+
+      if (errorUpdate) {
+        errorApiSupabase(errorUpdate);
+        return false;
+      }
+    } else {
+      // No existe → insertar nuevo registro
+      const { error: errorInsert } = await supabase.from("inventario").insert([
+        {
+          producto_id,
+          bodega_id,
+          cantidad: stock,
+        },
+      ]);
+
+      if (errorInsert) {
+        errorApiSupabase(errorInsert);
+        return false;
+      }
+    }
+
+    // 3. Actualizar el stock total del producto sumando todas las bodegas
+    const { data: totalStockData, error: errorSum } = await supabase
+      .from("inventario")
+      .select("cantidad")
+      .eq("producto_id", producto_id);
+
+    if (errorSum) {
+      errorApiSupabase(errorSum);
+      return false;
+    }
+
+    const totalStock = totalStockData.reduce(
+      (acc, item) => acc + item.cantidad,
+      0
+    );
+
+    const { error: errorStockUpdate } = await supabase
+      .from("producto")
+      .update({ stock: totalStock })
+      .eq("id", producto_id);
+
+    if (errorStockUpdate) {
+      errorApiSupabase(errorStockUpdate);
+      return false;
+    }
+
+    return true;
   },
   updateProducto: async ({
     producto,

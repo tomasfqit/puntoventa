@@ -1,4 +1,5 @@
 import { almacenApi } from "@/api/almacenApi";
+import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { ErrorTypeSupabase } from "@/interfaces/Common";
 import { Almacen } from "@/interfaces/Table";
 import {
@@ -6,7 +7,6 @@ import {
   UseMutationOptions,
   useQueryClient,
 } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { almacenKeys } from "./almacenKeys";
 
 export const useAlmacenCreate = (
@@ -21,7 +21,7 @@ export const useAlmacenCreate = (
   return useMutation({
     mutationFn: almacenApi.createAlmacen,
     onError: (err) => {
-      toast.error(err.message);
+      CustomToastSonner.error("No se pudo crear el almacen", err.message);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: almacenKeys.list() });

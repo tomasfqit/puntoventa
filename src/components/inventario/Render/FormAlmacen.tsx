@@ -1,5 +1,6 @@
 import { FormInput } from "@/components/ui/app-components/FormInput";
 import { Button } from "@/components/ui/button";
+import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { useModal } from "@/hooks/useModal";
 import { Almacen } from "@/interfaces/Table";
 import { useAlmacenCreate } from "@/services/almacen/useAlmacenCreate";
@@ -7,7 +8,6 @@ import { useAlmacenUpdate } from "@/services/almacen/useAlmacenUpdate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { formAlmacenSchema } from "./schemaFormAlmacen";
 
 interface FormAlmacenProps {
@@ -44,7 +44,7 @@ export function FormAlmacen({ initialData }: FormAlmacenProps) {
         { almacen: data, id: initialData.id },
         {
           onSuccess: () => {
-            toast.success("Almacen actualizado con exito");
+            CustomToastSonner.success("Almacen actualizado con exito");
             closeModal();
           },
         }
@@ -52,7 +52,7 @@ export function FormAlmacen({ initialData }: FormAlmacenProps) {
     } else {
       createAlmacen(data, {
         onSuccess: () => {
-          toast.success("Almacen creado con exito");
+          CustomToastSonner.success("Almacen creado con exito");
           closeModal();
         },
       });

@@ -3,11 +3,11 @@
 import { FormAlmacen } from "@/components/inventario/Render/FormAlmacen";
 import { TableAlmacen } from "@/components/inventario/Table/TableAlmacen";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
+import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { useModal } from "@/hooks/useModal";
 import { Almacen } from "@/interfaces/Table";
 import { useAlmacenDelete } from "@/services/almacen/useAlmacenDelete";
 import { useState } from "react";
-import { toast } from "sonner";
 
 const AlmacenPage = () => {
   const { mutate: deleteAlmacen } = useAlmacenDelete();
@@ -43,9 +43,8 @@ const AlmacenPage = () => {
           onOpenChange={setOpenModalConfirmarEliminar}
           onConfirm={() =>
             deleteAlmacen(itemSeleccionado?.id || 0, {
-              onSuccess: (data) => {
-                console.log("data =>", data);
-                toast.success("Almacen eliminado con exito");
+              onSuccess: () => {
+                CustomToastSonner.success("Almacen eliminado con exito");
                 setOpenModalConfirmarEliminar(false);
               },
             })

@@ -1,5 +1,6 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
+import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { Almacen } from "@/interfaces/Table";
 import { useAlmacenList } from "@/services/almacen/useAlmacenList";
 import { useAlmacenUpdate } from "@/services/almacen/useAlmacenUpdate";
@@ -8,7 +9,6 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
-import { toast } from "sonner";
 
 interface PropsTableAlmacen {
   setOpenModalMant: (item?: Almacen) => void;
@@ -32,13 +32,14 @@ export const TableAlmacen = ({
       { almacen, id: almacen.id },
       {
         onSuccess: () => {
-          toast.success("Almacen actualizado con exito");
+          CustomToastSonner.success("Almacen actualizado con exito");
         },
       }
     );
   };
 
   const colDefs: ColDef<Almacen>[] = [
+    { field: "id", headerName: "ID" },
     { field: "nombre", headerName: "Nombre" },
     {
       field: "direccion",

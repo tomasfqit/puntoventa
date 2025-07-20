@@ -4,6 +4,7 @@ import { FormBodega } from "@/components/inventario/Render/FormBodega";
 import { TableBodegas } from "@/components/inventario/Table/TableBodegas";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Bodega } from "@/interfaces/Table";
 import { useBodegaDelete } from "@/services/bodegas/useBodegaDelete";
 import { useState } from "react";
@@ -15,17 +16,20 @@ const BodegaPage = () => {
     useState(false);
   const [itemSeleccionado, setItemSeleccionado] = useState<Bodega>();
   const { openModal } = useModal();
+  const { setParams } = useQueryParams();
 
   const handleMantProducto = (itemSeleccionado?: Bodega) => {
+    setParams({ bodega_id: itemSeleccionado?.id || 0 });
     openModal({
-      title: "Nuevo Bodega",
-      subTitle: "Ingrese los datos del nuevo bodega",
+      title: itemSeleccionado ? "Editar Bodega" : "Nueva Bodega",
+      subTitle: itemSeleccionado
+        ? "Modifica los datos de la bodega"
+        : "Ingrese los datos del nuevo bodega",
       size: "md",
       viewFooter: false,
       children: <FormBodega initialData={itemSeleccionado} />,
     });
   };
-
   return (
     <div className="flex flex-col gap-4 w-full h-full bg-white rounded-md p-4">
       <h2 className="text-2xl font-bold">Bodega</h2>

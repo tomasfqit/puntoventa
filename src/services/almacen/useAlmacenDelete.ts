@@ -1,17 +1,17 @@
 import { almacenApi } from "@/api/almacenApi";
-import { PostgrestError } from "@supabase/supabase-js";
+import { CustomToastSonner } from "@/helpers/CustomToastSonner";
+import { ErrorTypeSupabase } from "@/interfaces/Common";
 import {
   useMutation,
   UseMutationOptions,
   useQueryClient,
 } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { almacenKeys } from "./almacenKeys";
 
 export const useAlmacenDelete = (
   mutationOptions?: UseMutationOptions<
     boolean | null,
-    PostgrestError,
+    ErrorTypeSupabase,
     number,
     unknown
   >
@@ -20,7 +20,7 @@ export const useAlmacenDelete = (
   return useMutation({
     mutationFn: almacenApi.deleteAlmacen,
     onError: (err) => {
-      toast.error(err.message);
+      CustomToastSonner.error("No se pudo eliminar el almacen", err.message);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: almacenKeys.list() });
