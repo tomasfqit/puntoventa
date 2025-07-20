@@ -1,38 +1,34 @@
 import { FormInput } from "@/components/ui/app-components/FormInput";
-import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/useModal";
-import { Bodega } from "@/interfaces/Table";
-import { useAlmacenList } from "@/services/almacen/useAlmacenList";
-import { useBodegaCreate } from "@/services/bodegas/useBodegasCreate";
-import { useBodegaUpdate } from "@/services/bodegas/useBodegasUpdate";
+import { Almacen } from "@/interfaces/Table";
+import { useAlmacenCreate } from "@/services/almacen/useAlmacenCreate";
+import { useAlmacenUpdate } from "@/services/almacen/useAlmacenUpdate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { formBodegaSchema } from "./schemaFormBodega";
+import { formAlmacenSchema } from "./schemaFormAlmacen";
 
-interface FormBodegaProps {
-  initialData?: Bodega;
+interface FormAlmacenProps {
+  initialData?: Almacen;
 }
 
-export function FormBodega({ initialData }: FormBodegaProps) {
+export function FormAlmacen({ initialData }: FormAlmacenProps) {
   const { closeModal } = useModal();
-  const { data: almacenes } = useAlmacenList();
-  const { mutate: updateBodega } = useBodegaUpdate();
-  const { mutate: createBodega } = useBodegaCreate();
+  const { mutate: updateAlmacen } = useAlmacenUpdate();
+  const { mutate: createAlmacen } = useAlmacenCreate();
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<Bodega>({
-    resolver: zodResolver(formBodegaSchema),
+  } = useForm<Almacen>({
+    resolver: zodResolver(formAlmacenSchema),
     defaultValues: {
-      id: initialData?.id || 0,
       nombre: initialData?.nombre || "",
-      almacen_id: initialData?.almacen_id || 0,
+      direccion: initialData?.direccion || "",
     },
   });
 
@@ -42,22 +38,21 @@ export function FormBodega({ initialData }: FormBodegaProps) {
     };
   }, [initialData, reset]);
 
-  const handleFormSubmit = async (data: Bodega) => {
-    console.log("initialData =>", data);
+  const handleFormSubmit = async (data: Almacen) => {
     if (initialData?.id) {
-      updateBodega(
-        { bodega: data, id: initialData.id },
+      updateAlmacen(
+        { almacen: data, id: initialData.id },
         {
           onSuccess: () => {
-            toast.success("Bodega actualizada con exito");
+            toast.success("Almacen actualizado con exito");
             closeModal();
           },
         }
       );
     } else {
-      createBodega(data, {
+      createAlmacen(data, {
         onSuccess: () => {
-          toast.success("Bodega creada con exito");
+          toast.success("Almacen creado con exito");
           closeModal();
         },
       });
@@ -69,7 +64,7 @@ export function FormBodega({ initialData }: FormBodegaProps) {
       onSubmit={handleSubmit(handleFormSubmit)}
       className="flex flex-col gap-2 w-full"
     >
-      <FormInput<Bodega>
+      <FormInput<Almacen>
         name="nombre"
         label="Nombre *"
         type="text"
@@ -78,18 +73,16 @@ export function FormBodega({ initialData }: FormBodegaProps) {
         toUpperCase
         error={errors.nombre?.message}
       />
-      <FormSelect<Bodega>
-        name="almacen_id"
-        label="Almacen *"
+      <FormInput<Almacen>
+        name="direccion"
+        label="Dirección *"
+        type="text"
+        placeholder="Ingrese la dirección"
         control={control}
-        options={(almacenes || []).map((almacen) => ({
-          label: almacen.nombre,
-          value: almacen.id || 0,
-        }))}
-        placeholder="Seleccionar almacen"
-        error={errors.almacen_id?.message}
+        toUpperCase
+        error={errors.direccion?.message}
       />
-      {/* Form Actions */}
+
       <div className="w-full flex justify-end mt-auto pt-4">
         <div className="flex gap-3">
           <Button type="button" variant="outline" onClick={() => closeModal()}>

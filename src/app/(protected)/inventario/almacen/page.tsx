@@ -1,37 +1,38 @@
 "use client";
 
-import { FormBodega } from "@/components/inventario/Render/FormBodega";
-import { TableBodegas } from "@/components/inventario/Table/TableBodegas";
+import { FormAlmacen } from "@/components/inventario/Render/FormAlmacen";
+import { TableAlmacen } from "@/components/inventario/Table/TableAlmacen";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
 import { useModal } from "@/hooks/useModal";
-import { Bodega } from "@/interfaces/Table";
-import { useBodegaDelete } from "@/services/bodegas/useBodegaDelete";
+import { Almacen } from "@/interfaces/Table";
+import { useAlmacenDelete } from "@/services/almacen/useAlmacenDelete";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const BodegaPage = () => {
-  const { mutate: deleteBodega } = useBodegaDelete();
+const AlmacenPage = () => {
+  const { mutate: deleteAlmacen } = useAlmacenDelete();
+  const [itemSeleccionado, setItemSeleccionado] = useState<Almacen>();
   const [openModalConfirmarEliminar, setOpenModalConfirmarEliminar] =
     useState(false);
-  const [itemSeleccionado, setItemSeleccionado] = useState<Bodega>();
   const { openModal } = useModal();
 
-  const handleMantProducto = (itemSeleccionado?: Bodega) => {
+  const handleMantAlmacen = (itemSeleccionado?: Almacen) => {
     openModal({
-      title: "Nuevo Bodega",
-      subTitle: "Ingrese los datos del nuevo bodega",
+      title: "Nuevo Almacen",
+      subTitle: "Ingrese los datos del nuevo almacen",
       size: "md",
       viewFooter: false,
-      children: <FormBodega initialData={itemSeleccionado} />,
+      children: <FormAlmacen initialData={itemSeleccionado} />,
     });
   };
 
   return (
     <div className="flex flex-col gap-4 w-full h-full bg-white rounded-md p-4">
-      <h2 className="text-2xl font-bold">Bodega</h2>
-      <TableBodegas
+      <h2 className="text-2xl font-bold">Almacenes</h2>
+      <TableAlmacen
+        itemSeleccionado={itemSeleccionado}
         setItemSeleccionado={setItemSeleccionado}
-        setOpenModalMant={handleMantProducto}
+        setOpenModalMant={handleMantAlmacen}
         setOpenModalConfirmarEliminar={setOpenModalConfirmarEliminar}
       />
       {openModalConfirmarEliminar && itemSeleccionado?.id && (
@@ -41,9 +42,10 @@ const BodegaPage = () => {
           open={openModalConfirmarEliminar}
           onOpenChange={setOpenModalConfirmarEliminar}
           onConfirm={() =>
-            deleteBodega(itemSeleccionado?.id || 0, {
-              onSuccess: () => {
-                toast.success("Bodega eliminado con exito");
+            deleteAlmacen(itemSeleccionado?.id || 0, {
+              onSuccess: (data) => {
+                console.log("data =>", data);
+                toast.success("Almacen eliminado con exito");
                 setOpenModalConfirmarEliminar(false);
               },
             })
@@ -54,4 +56,4 @@ const BodegaPage = () => {
   );
 };
 
-export default BodegaPage;
+export default AlmacenPage;

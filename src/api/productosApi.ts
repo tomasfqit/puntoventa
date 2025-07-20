@@ -6,47 +6,32 @@ import { supabase } from "@/lib/supabaseClient";
 
 export const productosApi = {
   fetchProductoById: async (id: number) => {
-    try {
-      const { data, error } = await supabase
-        .from("producto")
-        .select("*")
-        .eq("id", id);
-      if (error) errorApiSupabase(error);
-      const menuItems = obtenerMenuItems(data || []);
-      return menuItems;
-    } catch (error) {
-      console.error("Error al obtener el menú:", error);
-      return [];
-    }
+    const { data, error } = await supabase
+      .from("producto")
+      .select("*")
+      .eq("id", id);
+    if (error) errorApiSupabase(error);
+    const menuItems = obtenerMenuItems(data || []);
+    return menuItems;
   },
   fetchProductosList: async () => {
-    try {
-      const { data, error } = await supabase
-        .from("producto")
-        .select("*")
-        .is("deleted_at", null)
-        .order("nombre", { ascending: true });
-      if (error) errorApiSupabase(error);
-      return data as Producto[];
-    } catch (error) {
-      console.error("Error al obtener el menú:", error);
-      return [];
-    }
+    const { data, error } = await supabase
+      .from("producto")
+      .select("*")
+      .is("deleted_at", null)
+      .order("nombre", { ascending: true });
+    if (error) errorApiSupabase(error);
+    return data as Producto[];
   },
 
   createProducto: async (producto: SFormProductoData) => {
-    try {
-      const { error, status } = await supabase
-        .from("producto")
-        .insert([producto])
-        .select();
+    const { error, status } = await supabase
+      .from("producto")
+      .insert([producto])
+      .select();
 
-      if (error) errorApiSupabase(error);
-      return status === 201 ? true : false;
-    } catch (error) {
-      console.error("Error al crear el producto:", error);
-      return null;
-    }
+    if (error) errorApiSupabase(error);
+    return status === 201 ? true : false;
   },
   updateProducto: async ({
     producto,
@@ -55,31 +40,21 @@ export const productosApi = {
     producto: SFormProductoData;
     id: number;
   }) => {
-    try {
-      const { error, status } = await supabase
-        .from("producto")
-        .update(producto)
-        .eq("id", id)
-        .select();
+    const { error, status } = await supabase
+      .from("producto")
+      .update(producto)
+      .eq("id", id)
+      .select();
 
-      if (error) errorApiSupabase(error);
-      return status === 200 ? true : false;
-    } catch (error) {
-      console.error("Error al crear el producto:", error);
-      return null;
-    }
+    if (error) errorApiSupabase(error);
+    return status === 200 ? true : false;
   },
   deleteProducto: async (id: number) => {
-    try {
-      const { error, status } = await supabase
-        .from("producto")
-        .delete()
-        .eq("id", id);
-      if (error) errorApiSupabase(error);
-      return status === 200 ? true : false;
-    } catch (error) {
-      console.error("Error al eliminar el producto:", error);
-      return null;
-    }
+    const { error, status } = await supabase
+      .from("producto")
+      .delete()
+      .eq("id", id);
+    if (error) errorApiSupabase(error);
+    return status === 200 ? true : false;
   },
 };

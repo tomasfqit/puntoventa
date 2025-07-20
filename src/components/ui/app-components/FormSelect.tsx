@@ -45,11 +45,7 @@ export function FormSelect<T extends FieldValues>({
             <SelectTrigger
               className={cn("w-full", error && "border border-red-500")}
             >
-              <SelectValue placeholder={placeholder}>
-                {field.value
-                  ? options.find((opt) => opt.value === field.value)?.label
-                  : placeholder}
-              </SelectValue>
+              <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
               {options.map((option) => (
@@ -59,6 +55,7 @@ export function FormSelect<T extends FieldValues>({
               ))}
             </SelectContent>
           </Select>
+
           {fieldState.error && (
             <p className="text-sm text-destructive">
               {fieldState.error.message}

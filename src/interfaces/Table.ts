@@ -81,12 +81,13 @@ export interface Producto {
   actions?: unknown;
 }
 export interface Almacen {
-  id: number;
+  id?: number;
   nombre: string;
-  direccion?: string;
+  direccion: string;
   created_at?: string;
   updated_at?: string;
-  deleted_at?: string | null;
+  deleted_at?: string;
+  actions?: unknown;
 }
 
 export interface Bodega {

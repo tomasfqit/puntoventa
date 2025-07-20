@@ -1,8 +1,8 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
-import { Bodega } from "@/interfaces/Table";
-import { useBodegasList } from "@/services/bodegas/useBodegasList";
-import { useBodegaUpdate } from "@/services/bodegas/useBodegasUpdate";
+import { Almacen } from "@/interfaces/Table";
+import { useAlmacenList } from "@/services/almacen/useAlmacenList";
+import { useAlmacenUpdate } from "@/services/almacen/useAlmacenUpdate";
 import type { ICellRendererParams, NewValueParams } from "ag-grid-community";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -10,42 +10,42 @@ import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
 
-interface PropsTableBodegas {
-  setOpenModalMant: (item?: Bodega) => void;
+interface PropsTableAlmacen {
+  setOpenModalMant: (item?: Almacen) => void;
   setOpenModalConfirmarEliminar: (open: boolean) => void;
-  setItemSeleccionado: (item?: Bodega) => void;
+  setItemSeleccionado: (item?: Almacen) => void;
+  itemSeleccionado?: Almacen;
 }
 
-export const TableBodegas = ({
+export const TableAlmacen = ({
   setOpenModalConfirmarEliminar,
   setItemSeleccionado,
   setOpenModalMant,
-}: PropsTableBodegas) => {
+}: PropsTableAlmacen) => {
   const gridRef = useRef<AgGridReact>(null);
-  const { data: bodegas, isPending } = useBodegasList();
-  const { mutate: updateBodega } = useBodegaUpdate();
+  const { data: almacenes, isPending } = useAlmacenList();
+  const { mutate: updateAlmacen } = useAlmacenUpdate();
 
-  const handleUpdateBodega = (bodega: Bodega) => {
-    if (!bodega.id) return;
-    updateBodega(
-      { bodega, id: bodega.id },
+  const handleUpdateAlmacen = (almacen: Almacen) => {
+    if (!almacen.id) return;
+    updateAlmacen(
+      { almacen, id: almacen.id },
       {
         onSuccess: () => {
-          toast.success("Bodega actualizada con exito");
+          toast.success("Almacen actualizado con exito");
         },
       }
     );
   };
 
-  const colDefs: ColDef<Bodega>[] = [
-    { field: "id", headerName: "ID" },
+  const colDefs: ColDef<Almacen>[] = [
     { field: "nombre", headerName: "Nombre" },
     {
-      field: "almacen_id",
-      headerName: "Almacen",
+      field: "direccion",
+      headerName: "Dirección",
       editable: true,
-      onCellValueChanged(event: NewValueParams<Bodega>) {
-        handleUpdateBodega(event.data);
+      onCellValueChanged(event: NewValueParams<Almacen>) {
+        handleUpdateAlmacen(event.data);
       },
     },
     {
@@ -55,7 +55,7 @@ export const TableBodegas = ({
       maxWidth: 110,
       pinned: "right",
       cellClass: "flex justify-center items-center",
-      cellRenderer: (params: ICellRendererParams<Bodega>) => {
+      cellRenderer: (params: ICellRendererParams<Almacen>) => {
         return (
           <div className="flex flex-row gap-2">
             <Button
@@ -63,19 +63,19 @@ export const TableBodegas = ({
               size="icon"
               className="size-8"
               onClick={() => {
-                setOpenModalMant(params.data);
+                setItemSeleccionado(params.data!);
+                setOpenModalMant(params.data!);
               }}
             >
               <Edit className="w-4 h-4" />
             </Button>
-
             <Button
               variant="destructive"
               size="icon"
               className="size-8"
               onClick={() => {
-                setOpenModalConfirmarEliminar(true);
                 setItemSeleccionado(params.data);
+                setOpenModalConfirmarEliminar(true);
               }}
             >
               <Trash2 className="w-4 h-4" />
@@ -102,13 +102,13 @@ export const TableBodegas = ({
           }}
         >
           <PlusIcon className="w-4 h-4" />
-          Nueva Bodega
+          Nuevo Almacen
         </Button>
       </div>
       <div className="ag-theme-alpine w-full h-full">
         <AgGridReact
           ref={gridRef}
-          rowData={bodegas}
+          rowData={almacenes}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           loading={isPending}
