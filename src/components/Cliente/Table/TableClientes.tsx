@@ -1,12 +1,17 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
-import { IViewPersonaClienteList } from "@/models/IPersonaCliente";
+import {
+  IPersonaCliente,
+  IViewPersonaClienteList,
+} from "@/models/IPersonaCliente";
 import { useClientesList } from "@/services/clientes/useClientesList";
+import { useClienteUpdate } from "@/services/clientes/useClientesUpdate";
 import type { ICellRendererParams } from "ag-grid-community";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
+import { toast } from "sonner";
 
 interface PropsTableClientes {
   setOpenModalMant: (item?: IViewPersonaClienteList) => void;
@@ -21,25 +26,48 @@ export const TableClientes = ({
 }: PropsTableClientes) => {
   const gridRef = useRef<AgGridReact>(null);
   const { data: clientes, isPending } = useClientesList();
-  //const { mutate: updateCliente } = useClienteUpdate();
+  const { mutate: updateCliente } = useClienteUpdate();
 
-  //   const handleUpdateCliente = (cliente: Cliente) => {
-  //     if (!cliente.id) return;
-  //     updateCliente(
-  //       { cliente, id: cliente.id },
-  //       {
-  //         onSuccess: () => {
-  //           toast.success("Cliente actualizado con exito");
-  //         },
-  //       }
-  //     );
-  //   };
+  const handleUpdateCliente = (cliente: IViewPersonaClienteList) => {
+    const clientePersona: IPersonaCliente = {
+      nombres: cliente.nombres,
+      apellidos: cliente.apellidos,
+      identificacion: cliente.identificacion,
+      telefono: cliente.telefono,
+      correo: cliente.correo,
+      direccion: cliente.direccion,
+      cliente: {
+        persona_id: cliente.persona_id,
+        tipo_cliente: cliente.tipo_cliente,
+      },
+    };
+    if (!cliente.id) return;
+    updateCliente(
+      {
+        clientePersona,
+        persona_id: cliente.persona_id,
+        cliente_id: cliente.id,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Cliente actualizado con exito");
+        },
+      }
+    );
+  };
 
   const colDefs: ColDef<IViewPersonaClienteList>[] = [
     { field: "id", headerName: "ID" },
     { field: "identificacion", headerName: "Identificación" },
-    { field: "apellidos", headerName: "Apellidos" },
-    { field: "nombres", headerName: "Nombres" },
+    {
+      field: "apellidos",
+      headerName: "Apellidos",
+      editable: true,
+      onCellValueChanged: (params) => {
+        handleUpdateCliente(params.data);
+      },
+    },
+    { field: "nombres", headerName: "Nombres", editable: true },
     { field: "telefono", headerName: "Teléfono" },
     { field: "correo", headerName: "Correo" },
     { field: "direccion", headerName: "Dirección" },
