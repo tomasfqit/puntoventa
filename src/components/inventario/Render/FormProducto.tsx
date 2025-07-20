@@ -2,6 +2,8 @@ import { FormInput } from "@/components/ui/app-components/FormInput";
 import { FormInputNumber } from "@/components/ui/app-components/FormInputNumber";
 import { FormSelect } from "@/components/ui/app-components/FormSelect";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Producto } from "@/interfaces/Table";
 import { useBodegasList } from "@/services/bodegas/useBodegasList";
 import { useCategoriasList } from "@/services/categorias/useCategoriasList";
@@ -29,6 +32,7 @@ interface FormProductoProps {
 
 export function FormProducto({ initialData }: FormProductoProps) {
   const [bodegaId, setBodegaId] = useState<number>(0);
+  const [cantidad, setCantidad] = useState<number>(0);
   const { closeModal } = useModal();
   const { data: marcas } = useMarcaList();
   const { data: modelos } = useModeloList();
@@ -37,6 +41,8 @@ export function FormProducto({ initialData }: FormProductoProps) {
   const { mutate: createProducto, isPending } = useProductoCreate();
   const { mutate: updateProducto, isPending: isPendingUpdate } =
     useProductoUpdate();
+  const { getParam, clearParams } = useQueryParams();
+  const idProducto = getParam("producto_id");
 
   const {
     handleSubmit,
@@ -51,7 +57,6 @@ export function FormProducto({ initialData }: FormProductoProps) {
       categoria_id: initialData?.categoria_id || 0,
       modelo_id: initialData?.modelo_id || 0,
       nombre: initialData?.nombre || "",
-      stock: initialData?.stock || 0,
       precio_venta: initialData?.precio_venta || 0,
       precio_compra: initialData?.precio_compra || 0,
       descripcion: initialData?.descripcion || "",
@@ -65,23 +70,26 @@ export function FormProducto({ initialData }: FormProductoProps) {
   }, [initialData, reset]);
 
   const handleFormSubmit = async (data: SFormProductoData) => {
-    if (initialData) {
+    const id = idProducto ? Number(idProducto) : 0;
+    if (id) {
       updateProducto(
-        { producto: data, id: initialData.id },
+        { producto: data, id },
         {
           onSuccess: () => {
             toast.success("Producto actualizado con exito");
             closeModal();
+            clearParams();
           },
         }
       );
     } else {
       createProducto(
-        { producto: data, bodega_id: bodegaId },
+        { producto: data, bodega_id: bodegaId, cantidad },
         {
           onSuccess: () => {
             toast.success("Producto creado con exito");
             closeModal();
+            clearParams();
           },
         }
       );
@@ -126,14 +134,12 @@ export function FormProducto({ initialData }: FormProductoProps) {
         toUpperCase
         error={errors.descripcion?.message}
       />
-      <div className="flex flex-col gap-2">
-        <FormInputNumber<SFormProductoData>
-          name="stock"
-          label="Stock *"
-          placeholder="Ingrese el stock"
-          control={control}
-          error={errors.stock?.message}
-          register={register}
+      <div className="flex flex-col gap-2 w-full">
+        <Label>Cantidad</Label>
+        <Input
+          type="number"
+          value={cantidad}
+          onChange={(e) => setCantidad(Number(e.target.value))}
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -153,7 +159,6 @@ export function FormProducto({ initialData }: FormProductoProps) {
           error={errors.precio_compra?.message}
           register={register}
         />
-
         <FormSelect<SFormProductoData>
           name="marca_id"
           label="Marca *"

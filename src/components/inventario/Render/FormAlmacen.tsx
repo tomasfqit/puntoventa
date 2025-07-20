@@ -2,6 +2,7 @@ import { FormInput } from "@/components/ui/app-components/FormInput";
 import { Button } from "@/components/ui/button";
 import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Almacen } from "@/interfaces/Table";
 import { useAlmacenCreate } from "@/services/almacen/useAlmacenCreate";
 import { useAlmacenUpdate } from "@/services/almacen/useAlmacenUpdate";
@@ -18,6 +19,8 @@ export function FormAlmacen({ initialData }: FormAlmacenProps) {
   const { closeModal } = useModal();
   const { mutate: updateAlmacen } = useAlmacenUpdate();
   const { mutate: createAlmacen } = useAlmacenCreate();
+  const { getParam, clearParams } = useQueryParams();
+  const idAlmacen = getParam("almacen_id");
 
   const {
     handleSubmit,
@@ -39,13 +42,15 @@ export function FormAlmacen({ initialData }: FormAlmacenProps) {
   }, [initialData, reset]);
 
   const handleFormSubmit = async (data: Almacen) => {
-    if (initialData?.id) {
+    const id = idAlmacen ? Number(idAlmacen) : 0;
+    if (id) {
       updateAlmacen(
-        { almacen: data, id: initialData.id },
+        { almacen: data, id },
         {
           onSuccess: () => {
             CustomToastSonner.success("Almacen actualizado con exito");
             closeModal();
+            clearParams();
           },
         }
       );
@@ -54,6 +59,7 @@ export function FormAlmacen({ initialData }: FormAlmacenProps) {
         onSuccess: () => {
           CustomToastSonner.success("Almacen creado con exito");
           closeModal();
+          clearParams();
         },
       });
     }

@@ -26,11 +26,13 @@ export const productosApi = {
   createProducto: async ({
     producto,
     bodega_id,
+    cantidad,
   }: {
     producto: SFormProductoData;
     bodega_id: number;
+    cantidad: number;
   }) => {
-    const { stock, ...productoData } = producto;
+    const { ...productoData } = producto;
 
     // 1. Insertar el producto
     const { data: productoInsertado, error: errorProducto } = await supabase
@@ -62,7 +64,7 @@ export const productosApi = {
 
     if (inventarioExistente) {
       // Ya existe → sumar la cantidad
-      const nuevaCantidad = inventarioExistente.cantidad + stock;
+      const nuevaCantidad = inventarioExistente.cantidad + cantidad;
 
       const { error: errorUpdate } = await supabase
         .from("inventario")
@@ -79,7 +81,7 @@ export const productosApi = {
         {
           producto_id,
           bodega_id,
-          cantidad: stock,
+          cantidad,
         },
       ]);
 

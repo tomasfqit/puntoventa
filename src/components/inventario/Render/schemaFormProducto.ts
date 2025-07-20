@@ -9,7 +9,6 @@ export type SFormProductoData = {
   nombre: string;
   precio_venta: number;
   precio_compra: number;
-  stock: number;
   descripcion?: string;
 };
 
@@ -32,6 +31,5 @@ export const formProductoSchema = z.object({
       error: "El precio de compra debe ser un número",
     })
     .pipe(z.number().min(0, "El precio es requerido")),
-  stock: z.number().min(0, "El stock es requerido"),
   descripcion: z.string().optional(),
 });

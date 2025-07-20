@@ -4,6 +4,7 @@ import { FormProducto } from "@/components/inventario/Render/FormProducto";
 import { TableProductos } from "@/components/inventario/Table/TableProductos";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Producto } from "@/interfaces/Table";
 import { useProductoDelete } from "@/services/productos/useProductoDelete";
 import { useState } from "react";
@@ -15,8 +16,10 @@ const ProductosPage = () => {
   const [openModalConfirmarEliminar, setOpenModalConfirmarEliminar] =
     useState(false);
   const { openModal } = useModal();
+  const { setParams } = useQueryParams();
 
   const handleMantProducto = (itemSeleccionado?: Producto) => {
+    setParams({ producto_id: itemSeleccionado?.id || 0 });
     openModal({
       title: "Nuevo Producto",
       subTitle: "Ingrese los datos del nuevo producto",

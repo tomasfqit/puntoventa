@@ -12,7 +12,7 @@ export const useProductoCreate = (
   mutationOptions?: UseMutationOptions<
     boolean | null,
     ErrorTypeSupabase,
-    { producto: SFormProductoData; bodega_id: number },
+    { producto: SFormProductoData; bodega_id: number; cantidad: number },
     unknown
   >
 ) => {

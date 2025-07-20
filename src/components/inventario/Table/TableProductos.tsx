@@ -57,10 +57,6 @@ export const TableProductos = ({
     {
       field: "stock",
       headerName: "Stock",
-      editable: true,
-      onCellValueChanged(event: NewValueParams<Producto>) {
-        handleUpdateProducto(event.data);
-      },
     },
     {
       field: "actions",

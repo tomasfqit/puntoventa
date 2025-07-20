@@ -5,6 +5,7 @@ import { TableAlmacen } from "@/components/inventario/Table/TableAlmacen";
 import { ModalConfirmarEliminar } from "@/components/layout/ModalConfirmarEliminar";
 import { CustomToastSonner } from "@/helpers/CustomToastSonner";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Almacen } from "@/interfaces/Table";
 import { useAlmacenDelete } from "@/services/almacen/useAlmacenDelete";
 import { useState } from "react";
@@ -15,8 +16,10 @@ const AlmacenPage = () => {
   const [openModalConfirmarEliminar, setOpenModalConfirmarEliminar] =
     useState(false);
   const { openModal } = useModal();
+  const { setParams } = useQueryParams();
 
   const handleMantAlmacen = (itemSeleccionado?: Almacen) => {
+    setParams({ almacen_id: itemSeleccionado?.id || 0 });
     openModal({
       title: "Nuevo Almacen",
       subTitle: "Ingrese los datos del nuevo almacen",
