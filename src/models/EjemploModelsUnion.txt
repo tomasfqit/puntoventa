@@ -1,0 +1,33 @@
+Otras utility types comunes en TypeScript
+Aquí tienes un resumen con ejemplos:
+
+Utility Type	Descripción	Ejemplo
+Pick<T, K>	Crea un tipo con solo las propiedades K de T.	`Pick<User, 'id'
+Omit<T, K>	Crea un tipo con todas menos las propiedades K de T.	Omit<User, 'password'>
+Partial<T>	Hace que todas las propiedades de T sean opcionales.	Partial<User>
+Required<T>	Hace que todas las propiedades de T sean requeridas.	Required<ParcialUser>
+Readonly<T>	Hace que todas las propiedades de T sean de solo lectura.	Readonly<User>
+Record<K, T>	Crea un tipo con claves K y valores del tipo T.	`Record<'activo'
+Exclude<T, U>	Elimina del tipo T los elementos que también están en U.	`Exclude<'a'
+Extract<T, U>	Mantiene solo los tipos comunes entre T y U.	`Extract<'a'
+NonNullable<T>	Quita null y undefined del tipo.	`NonNullable<string
+ReturnType<T>	Obtiene el tipo de retorno de una función.	ReturnType<() => string>
+Parameters<T>	Obtiene la tupla de tipos de los argumentos de una función.	Parameters<(a: string, b: number) => void>
+ConstructorParameters<T>	Lo mismo que Parameters, pero para constructores.	ConstructorParameters<typeof Date>
+InstanceType<T>	Tipo de instancia de una clase/constructor.	InstanceType<typeof MyClass>
+
+🧠 Ejemplo práctico combinando:
+ts
+Copiar
+Editar
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  password?: string;
+};
+
+type PublicUser = Omit<User, 'password'>;        // Excluye la contraseña
+type OptionalUser = Partial<User>;               // Todos opcionales
+type RequiredUser = Required<User>;              // Todos obligatorios
+type ReadOnlyUser = Readonly<User>;              // No modificable

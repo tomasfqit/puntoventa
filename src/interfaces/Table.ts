@@ -1,27 +1,27 @@
 export interface Persona {
-  id: number;
+  id?: number;
   nombres: string;
-  apellidos?: string;
+  apellidos: string;
   identificacion: string;
   telefono?: string;
   correo?: string;
   direccion?: string;
   created_at?: string;
   updated_at?: string;
-  deleted_at?: string | null;
+  deleted_at?: string;
 }
 
 export interface Cliente {
-  id: number;
-  persona_id: number;
-  tipo_cliente?: string;
+  id?: number;
+  persona_id?: number;
+  tipo_cliente: string;
   created_at?: string;
   updated_at?: string;
-  deleted_at?: string | null;
+  deleted_at?: string;
 }
 
 export interface Proveedor {
-  id: number;
+  id?: number;
   persona_id: number;
   empresa?: string;
   created_at?: string;

@@ -101,21 +101,24 @@ export function FormProducto({ initialData }: FormProductoProps) {
       onSubmit={handleSubmit(handleFormSubmit)}
       className="flex flex-col gap-2 w-full"
     >
-      <Select
-        value={String(bodegaId)}
-        onValueChange={(value) => setBodegaId(Number(value))}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Seleccionar bodega" />
-        </SelectTrigger>
-        <SelectContent>
-          {bodegas?.map((bodega) => (
-            <SelectItem key={bodega.id} value={String(bodega.id)}>
-              {bodega.nombre}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col gap-2 w-full">
+        <Label>Bodega *</Label>
+        <Select
+          value={String(bodegaId)}
+          onValueChange={(value) => setBodegaId(Number(value))}
+        >
+          <SelectTrigger className="text-black w-1/2">
+            <SelectValue placeholder="Seleccionar bodega" />
+          </SelectTrigger>
+          <SelectContent>
+            {bodegas?.map((bodega) => (
+              <SelectItem key={bodega.id} value={String(bodega.id)}>
+                {bodega.nombre}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       <FormInput<SFormProductoData>
         name="nombre"
         label="Nombre *"

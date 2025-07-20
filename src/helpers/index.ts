@@ -27,8 +27,8 @@ export const removeToken = () => {
   localStorage.removeItem("token");
 };
 
-export const errorApiSupabase = (error: ErrorTypeSupabase) => {
-  throw error;
+export const errorApiSupabase = (error: ErrorTypeSupabase | null) => {
+  if (error) throw error;
 };
 
 export const iconMap: Record<
