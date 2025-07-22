@@ -4,16 +4,21 @@ import { IViewPersonaClienteList } from "@/models/IPersonaCliente";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { clientesKeys } from "./clientesKey";
 
-export const useClientesList = (
+export const useClientesById = (
+  identificacion: string,
   queryOptions?: UseQueryOptions<
     IViewPersonaClienteList[],
     ErrorTypeSupabase,
-    IViewPersonaClienteList[]
+    IViewPersonaClienteList[],
+    ReturnType<(typeof clientesKeys)["clienteFilterById"]>
   >
 ) => {
+  const obtenerClienteById = async () => {
+    return await clientesApi.fetchClienteById(identificacion);
+  };
   return useQuery({
-    queryKey: clientesKeys.list(),
-    queryFn: clientesApi.fetchClientesList,
+    queryKey: ["clientes", "byId", identificacion],
+    queryFn: obtenerClienteById,
     ...queryOptions,
   });
 };

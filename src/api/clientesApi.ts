@@ -1,5 +1,4 @@
 import { errorApiSupabase } from "@/helpers";
-import { obtenerMenuItems } from "@/helpers/obtenerMenuItems";
 import { Cliente, Persona } from "@/interfaces/Table";
 import { supabase } from "@/lib/supabaseClient";
 import {
@@ -9,17 +8,24 @@ import {
 import { personaApi } from "./personaApi";
 
 export const clientesApi = {
-  fetchClienteById: async (id: number) => {
-    const persona = await personaApi.fetchPersonaById(id);
-    if (!persona) return null;
+  fetchClienteById: async (
+    identificacion: string
+  ): Promise<IViewPersonaClienteList[]> => {
     const { data, error } = await supabase
-      .from("cliente")
+      .from("view_persona_cliente")
       .select("*")
-      .eq("id", id);
+      .is("deleted_at", null)
+      .or(
+        `identificacion.ilike.%${identificacion}%,` +
+          `nombres.ilike.%${identificacion}%,` +
+          `apellidos.ilike.%${identificacion}%`
+      )
+      .limit(5);
+
     errorApiSupabase(error);
-    const menuItems = obtenerMenuItems(data || []);
-    return menuItems;
+    return data || [];
   },
+
   fetchClientesList: async (): Promise<IViewPersonaClienteList[]> => {
     const { data, error } = await supabase
       .from("view_persona_cliente")

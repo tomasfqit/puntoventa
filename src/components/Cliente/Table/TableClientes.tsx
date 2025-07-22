@@ -1,5 +1,6 @@
 import InputFilterTable from "@/components/layout/InputFilterTable";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/useModal";
 import {
   IPersonaCliente,
   IViewPersonaClienteList,
@@ -12,6 +13,7 @@ import { AgGridReact } from "ag-grid-react";
 import { Edit, PlusIcon, Trash2 } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
+import { BuscarClienteByIdentificacion } from "../Render/BuscarClienteByIdentificacion";
 
 interface PropsTableClientes {
   setOpenModalMant: (item?: IViewPersonaClienteList) => void;
@@ -27,6 +29,7 @@ export const TableClientes = ({
   const gridRef = useRef<AgGridReact>(null);
   const { data: clientes, isPending } = useClientesList();
   const { mutate: updateCliente } = useClienteUpdate();
+  const { openModal } = useModal();
 
   const handleUpdateCliente = (cliente: IViewPersonaClienteList) => {
     const clientePersona: IPersonaCliente = {
@@ -145,16 +148,19 @@ export const TableClientes = ({
     filter: true,
   };
 
+  const handleBuscarCliente = () => {
+    openModal({
+      title: "Ingresar Identificación Cliente",
+      children: <BuscarClienteByIdentificacion />,
+      size: "sm",
+    });
+  };
+
   return (
     <div className="flex flex-col p-2 bg-white rounded-md gap-2 w-full h-[70vh]">
       <div className="flex flex-row gap-2">
         <InputFilterTable gridRef={gridRef} />
-        <Button
-          variant="default"
-          onClick={() => {
-            setOpenModalMant();
-          }}
-        >
+        <Button variant="default" onClick={handleBuscarCliente}>
           <PlusIcon className="w-4 h-4" />
           Nuevo Cliente
         </Button>
