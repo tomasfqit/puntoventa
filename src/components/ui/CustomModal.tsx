@@ -9,10 +9,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useModal } from "@/hooks/useModal";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { useEffect } from "react";
 import { Button } from "./button";
 
 export const CustomModal = () => {
   const { isOpen, closeModal, modalConfig } = useModal();
+  const { clearParams } = useQueryParams();
+
+  useEffect(() => {
+    if (!isOpen) {
+      clearParams();
+    }
+  }, [isOpen]);
 
   const handleSave = () => {
     if (modalConfig.onSave) {

@@ -32,14 +32,7 @@ export const clientesApi = {
   createCliente: async (
     personaCliente: IPersonaCliente
   ): Promise<Cliente | null> => {
-    const newPersona: Persona = {
-      nombres: personaCliente.nombres,
-      apellidos: personaCliente.apellidos,
-      identificacion: personaCliente.identificacion,
-      telefono: personaCliente.telefono,
-      correo: personaCliente.correo,
-      direccion: personaCliente.direccion,
-    };
+    const newPersona: Persona = mapeoPersona(personaCliente);
     const newPersonaCreated = await personaApi.createPersona(newPersona);
     if (!newPersonaCreated) return null;
     const newCliente: Cliente = {
@@ -62,7 +55,7 @@ export const clientesApi = {
     persona_id: number;
     cliente_id: number;
   }) => {
-    const editPersona: Persona = clientePersona;
+    const editPersona: Persona = mapeoPersona(clientePersona);
     const editCliente: Cliente = clientePersona.cliente;
     const { data: persona, error: errorPersona } = await supabase
       .from("persona")
@@ -83,9 +76,20 @@ export const clientesApi = {
   deleteCliente: async (id: number) => {
     const { error, status } = await supabase
       .from("cliente")
-      .delete()
+      .update({ deleted_at: new Date().toISOString() })
       .eq("id", id);
     if (error) errorApiSupabase(error);
     return status === 200 ? true : false;
   },
+};
+
+export const mapeoPersona = (persona: IPersonaCliente): Persona => {
+  return {
+    nombres: persona.nombres,
+    apellidos: persona.apellidos,
+    identificacion: persona.identificacion,
+    telefono: persona.telefono,
+    correo: persona.correo,
+    direccion: persona.direccion,
+  };
 };

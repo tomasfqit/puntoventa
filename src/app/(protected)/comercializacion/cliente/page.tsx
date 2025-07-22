@@ -20,7 +20,12 @@ const ClientePage = () => {
   const { setParams } = useQueryParams();
 
   const handleMantCliente = (itemSeleccionado?: IViewPersonaClienteList) => {
-    setParams({ cliente_id: itemSeleccionado?.id || 0 });
+    if (itemSeleccionado) {
+      setParams({
+        cliente_id: itemSeleccionado.id || 0,
+        persona_id: itemSeleccionado.persona_id || 0,
+      });
+    }
     openModal({
       title: "Nuevo Cliente",
       subTitle: "Ingrese los datos del nuevo cliente",

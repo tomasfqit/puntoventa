@@ -63,15 +63,45 @@ export const TableClientes = ({
       field: "apellidos",
       headerName: "Apellidos",
       editable: true,
+      valueFormatter: ({ value }) => value?.toUpperCase?.(),
       onCellValueChanged: (params) => {
         handleUpdateCliente(params.data);
       },
     },
-    { field: "nombres", headerName: "Nombres", editable: true },
-    { field: "telefono", headerName: "Teléfono" },
-    { field: "correo", headerName: "Correo" },
-    { field: "direccion", headerName: "Dirección" },
-    { field: "tipo_cliente", headerName: "Tipo de Cliente" },
+    {
+      field: "nombres",
+      headerName: "Nombres",
+      editable: true,
+      valueFormatter: ({ value }) => value?.toUpperCase?.(),
+      onCellValueChanged: (params) => {
+        handleUpdateCliente(params.data);
+      },
+    },
+    {
+      field: "telefono",
+      headerName: "Teléfono",
+      editable: true,
+      onCellValueChanged: (params) => {
+        handleUpdateCliente(params.data);
+      },
+    },
+    {
+      field: "correo",
+      headerName: "Correo",
+      editable: true,
+      onCellValueChanged: (params) => {
+        handleUpdateCliente(params.data);
+      },
+    },
+    {
+      field: "direccion",
+      headerName: "Dirección",
+      editable: true,
+      valueFormatter: ({ value }) => value?.toUpperCase?.(),
+      onCellValueChanged: (params) => {
+        handleUpdateCliente(params.data);
+      },
+    },
     {
       field: "actions",
       headerName: "Acciones",

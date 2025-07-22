@@ -9,7 +9,6 @@ import {
 import { useClienteCreate } from "@/services/clientes/useClientesCreate";
 import { useClienteUpdate } from "@/services/clientes/useClientesUpdate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { SubmitErrorHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { formClienteSchema } from "./schemaFormCliente";
@@ -30,7 +29,6 @@ export function FormMantCliente({ initialData }: FormClienteProps) {
     handleSubmit,
     control,
     formState: { errors },
-    reset,
   } = useForm<IPersonaCliente>({
     resolver: zodResolver(formClienteSchema),
     defaultValues: {
@@ -46,12 +44,6 @@ export function FormMantCliente({ initialData }: FormClienteProps) {
       },
     },
   });
-
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, [initialData, reset]);
 
   const handleFormSubmit = async (data: IPersonaCliente) => {
     const cliente_id = idCliente ? Number(idCliente) : 0;
