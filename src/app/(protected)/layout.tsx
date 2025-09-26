@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header onToggleSidebar={toggleSidebar} title="Panel de Control" />
+      <Header onToggleSidebar={toggleSidebar} title="Koinonía App" />
       <Sidebar isOpen={sidebarOpen} />
       <MainContent sidebarOpen={sidebarOpen}>
         <div className="w-full h-[90.3vh] bg-gray-100 overflow-y-auto p-2">

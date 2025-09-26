@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
-import { getToken, setToken, removeToken } from '@/api/config';
-import { useRouter } from 'next/navigation';
+import { getToken, removeToken, setToken } from "@/api/config";
+import { IBrother } from "@/interfaces/IBrother";
+import { setLocalStorageBrother } from "@/services/brothers/brother.service";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -17,16 +19,17 @@ export function useAuth() {
     checkAuth();
   }, []);
 
-  const login = (token: string) => {
-    setToken(token);
+  const login = (brother: IBrother) => {
+    setLocalStorageBrother(brother);
+    setToken(JSON.stringify(brother));
     setIsAuthenticated(true);
-    router.push('/home');
+    router.push("/home");
   };
 
   const logout = () => {
     removeToken();
     setIsAuthenticated(false);
-    router.push('/login');
+    router.push("/login");
   };
 
   return {
@@ -35,4 +38,4 @@ export function useAuth() {
     login,
     logout,
   };
-} 
+}

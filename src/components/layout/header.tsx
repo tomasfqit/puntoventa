@@ -1,56 +1,70 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { setToken } from "@/helpers";
+import { getLocalStorageBrother } from "@/services/brothers/brother.service";
 import { Menu, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface HeaderProps {
-    onToggleSidebar: () => void
-    title?: string
+  onToggleSidebar: () => void;
+  title?: string;
 }
 
-export function Header({ onToggleSidebar, title = "Mi Aplicación" }: HeaderProps) {
+export function Header({
+  onToggleSidebar,
+  title = "Koinonía App",
+}: HeaderProps) {
+  const router = useRouter();
+  const handleLogout = () => {
+    setToken("");
+    localStorage.clear();
+    router.push("/login");
+  };
 
-    const router = useRouter();
-    const handleLogout = () => {
-        setToken("");
-        localStorage.clear();
-        router.push("/login");
-    }
+  return (
+    <header className="bg-black fixed top-0 left-0 right-0 h-16 border-b border-gray-200 flex items-center px-4 z-50">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onToggleSidebar}
+        className="dark mr-4"
+      >
+        <Menu className="h-5 w-5" color="white" />
+      </Button>
 
-    return (
-        <header className="bg-black fixed top-0 left-0 right-0 h-16 border-b border-gray-200 flex items-center px-4 z-50">
-            <Button variant="ghost" size="icon" onClick={onToggleSidebar} className="dark mr-4">
-                <Menu className="h-5 w-5" color="white" />
+      <h1 className="text-md text-white font-semibold">{title}</h1>
+
+      <div className="ml-auto flex items-center gap-4">
+        <span className="text-xs text-white">
+          {getLocalStorageBrother()?.name || "Hermano"}
+        </span>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="dark">
+              <User className="h-5 w-5" color="white" />
             </Button>
-
-            <h1 className="text-xl text-white font-semibold">{title}</h1>
-
-            <div className="ml-auto flex items-center gap-4">
-                {/* Aquí puedes agregar más elementos del header como usuario, notificaciones, etc. */}
-                <span className="text-sm text-white">Usuario</span>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="dark">
-                            <User className="h-5 w-5" color="white" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>Cuenta</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="hover:cursor-pointer" onClick={handleLogout}>Cerrar sesión</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </header>
-    )
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Cuenta</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="hover:cursor-pointer"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  );
 }

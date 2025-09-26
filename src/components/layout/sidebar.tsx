@@ -36,7 +36,7 @@ export const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <aside
       className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out z-40 ${
-        isOpen ? "w-64" : "w-0"
+        isOpen ? "w-[100dvw] sm:w-64" : "w-0"
       } overflow-hidden`}
     >
       <div className="p-1">
