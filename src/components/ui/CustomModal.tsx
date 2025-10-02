@@ -30,12 +30,12 @@ export const CustomModal = () => {
     closeModal();
   };
 
-  const handleCancel = () => {
-    if (modalConfig.onCancel) {
-      modalConfig.onCancel();
-    }
-    closeModal();
-  };
+  // const handleCancel = () => {
+  //   if (modalConfig.onCancel) {
+  //     modalConfig.onCancel();
+  //   }
+  //   closeModal();
+  // };
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
@@ -52,12 +52,12 @@ export const CustomModal = () => {
         </DialogHeader>
         <div className="flex w-full h-full">{modalConfig.children}</div>
         {modalConfig.viewFooter && (
-          <DialogFooter className="grid grid-cols-2 gap-2">
-            <Button variant="outline" onClick={handleCancel} className="w-full">
+          <DialogFooter className="flex justify-center gap-2">
+            {/* <Button variant="outline" onClick={handleCancel} className="w-full">
               Cancelar
-            </Button>
+            </Button> */}
             <Button variant="default" onClick={handleSave}>
-              Guardar
+              ACEPTAR
             </Button>
           </DialogFooter>
         )}

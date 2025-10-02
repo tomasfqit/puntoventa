@@ -7,6 +7,7 @@ export interface ITypesGroup {
 
 export interface IGroup {
   id: string;
+  number: number;
   name: string;
   type: ITypesGroup["id"];
   members: IBrother[];

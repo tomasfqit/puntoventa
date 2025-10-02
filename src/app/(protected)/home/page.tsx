@@ -1,9 +1,14 @@
 "use client";
 import CustomCard from "@/components/components/CustomCard";
+import { MiGrupoEucaristia } from "@/components/MIGrupoEucaristia";
+import { MiGrupoPalabra } from "@/components/MIGrupoPalabra";
+import { MiGrupoPanYVino } from "@/components/MIGrupoPanYVino";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/useModal";
 import { BookOpenText, Church, Wine } from "lucide-react";
 import { BrothersList } from "../brothers/list";
+import { CurrentPanYVino } from "./component/CurrentPanYVino";
+import { CurrentPresentacionPalabra } from "./component/CurrentPresentacionPalabra";
 
 export default function HomePage() {
   const { openModal } = useModal();
@@ -14,11 +19,7 @@ export default function HomePage() {
       subTitle: "Proximo miercoles",
       size: "md",
       viewFooter: true,
-      children: (
-        <div>
-          <p>Este es el contenido del modal</p>
-        </div>
-      ),
+      children: <CurrentPresentacionPalabra />,
       onSave: () => {
         // Lógica para guardar
         console.log("Usuario guardado");
@@ -36,11 +37,7 @@ export default function HomePage() {
       subTitle: "Proximo sabado",
       size: "md",
       viewFooter: true,
-      children: (
-        <div>
-          <p>Este es el contenido del modal</p>
-        </div>
-      ),
+      children: <CurrentPanYVino />,
     });
   };
   const openModalBrothersList = () => {
@@ -80,9 +77,9 @@ export default function HomePage() {
         </Button>
       </div>
       <div className="flex flex-col gap-2 bg-gray-200 rounded-xl h-[50vh] overflow-y-auto">
-        <CustomCard title="PALABRA" />
-        <CustomCard title="PAN Y VINO" />
-        <CustomCard title="EUCARISTIA" />
+        <CustomCard title="PALABRA" content={<MiGrupoPalabra />} />
+        <CustomCard title="PAN Y VINO" content={<MiGrupoPanYVino />} />
+        <CustomCard title="EUCARISTIA" content={<MiGrupoEucaristia />} />
       </div>
     </div>
   );

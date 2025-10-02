@@ -6,6 +6,7 @@ export interface IBrother {
   email?: string;
   telefono?: string;
   direccion?: string;
+  isHead?: boolean;
 }
 
 export interface ICurrentBrother extends IBrother {
